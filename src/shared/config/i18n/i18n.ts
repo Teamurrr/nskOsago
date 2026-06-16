@@ -1,7 +1,22 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
-import { defaultLanguage, en, fallbackLanguage, ru } from './index'
+import {
+  type AppLanguage,
+  defaultLanguage,
+  en,
+  fallbackLanguage,
+  i18nStorageKey,
+  languages,
+  ru,
+} from './index'
+
+const savedLanguage = localStorage.getItem(i18nStorageKey)
+
+const initialLanguage: AppLanguage =
+  savedLanguage !== null && languages.includes(savedLanguage as AppLanguage)
+    ? (savedLanguage as AppLanguage)
+    : defaultLanguage
 
 const resources = {
   ru,
@@ -10,7 +25,7 @@ const resources = {
 
 void i18n.use(initReactI18next).init({
   resources,
-  lng: defaultLanguage,
+  lng: initialLanguage,
   fallbackLng: fallbackLanguage,
   interpolation: {
     escapeValue: false,

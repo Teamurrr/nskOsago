@@ -1,3 +1,5 @@
+export const i18nStorageKey = 'app-language'
+
 export const defaultLanguage = 'ru'
 export const fallbackLanguage = 'en'
 
