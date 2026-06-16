@@ -63,7 +63,7 @@ export function AppLayout() {
           }}
         >
           <Title level={5} style={{ margin: 0 }}>
-            OSAGO Demo
+            NSK OSAGO 
           </Title>
         </Header>
 
