@@ -1,5 +1,5 @@
-import { HomePage } from '../pages/home'
+import { RouterProvider } from './providers/router/ui/RouterProvider'
 
 export function App() {
-  return <HomePage />
+  return <RouterProvider />
 }
