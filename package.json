@@ -10,8 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^6.2.5",
+    "antd": "^6.4.4",
+    "axios": "^1.18.0",
+    "browser-image-compression": "^2.0.2",
+    "dayjs": "^1.11.21",
+    "i18next": "^26.3.1",
+    "msw": "^2.14.6",
+    "nanoid": "^5.1.11",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "react-i18next": "^17.0.8",
+    "react-router-dom": "^7.17.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
