@@ -1,12 +1,15 @@
 import { Card, Typography } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 const { Paragraph, Title } = Typography
 
 export function CalculatorPage() {
+  const { t } = useTranslation()
+
   return (
     <Card>
-      <Title level={2}>OSAGO Calculator</Title>
-      <Paragraph>This page will contain the premium calculation form and breakdown.</Paragraph>
+      <Title level={2}>{t('pages.calculator.title')}</Title>
+      <Paragraph>{t('pages.calculator.description')}</Paragraph>
     </Card>
   )
 }
