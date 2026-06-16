@@ -1,3 +1,4 @@
+export { getPolicies } from './api/getPolices'
 export type {
   DriverAccessType,
   DriverInfo,

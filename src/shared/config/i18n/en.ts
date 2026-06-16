@@ -28,6 +28,7 @@ export const en = {
         description: 'Page not found.',
         action: 'Go to policies',
       },
+      empty: 'No policies yet.',
     },
   },
 }
