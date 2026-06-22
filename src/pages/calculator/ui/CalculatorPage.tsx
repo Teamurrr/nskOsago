@@ -20,10 +20,11 @@ import { useDictionaries } from '../model/useDictionaries'
 const { Paragraph, Text, Title } = Typography
 
 export function CalculatorPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { data, isLoading, error } = useDictionaries()
   const [form] = Form.useForm<PremiumCalculationInput>()
   const values = Form.useWatch([], form)
+  const isRussian = i18n.language === 'ru'
 
   const calculationResult =
     data &&
@@ -72,71 +73,105 @@ export function CalculatorPage() {
               bonusMalusClass: 3,
             }}
           >
-            <Form.Item label="Region" name="regionId">
+            <Form.Item label={t('pages.calculator.form.region')} name="regionId">
               <Select
                 options={data.regions.map((region) => ({
                   value: region.id,
-                  label: region.nameEn,
+                  label: isRussian ? region.nameRu : region.nameEn,
                 }))}
               />
             </Form.Item>
 
-            <Form.Item label="Power" name="power">
+            <Form.Item label={t('pages.calculator.form.power')} name="power">
               <InputNumber min={1} style={{ width: '100%' }} />
             </Form.Item>
 
-            <Form.Item label="Driver age" name="driverAge">
+            <Form.Item label={t('pages.calculator.form.driverAge')} name="driverAge">
               <InputNumber min={18} style={{ width: '100%' }} />
             </Form.Item>
 
-            <Form.Item label="Driver experience" name="driverExperience">
+            <Form.Item
+              label={t('pages.calculator.form.driverExperience')}
+              name="driverExperience"
+            >
               <InputNumber min={0} style={{ width: '100%' }} />
             </Form.Item>
 
-            <Form.Item label="Driver access" name="driverAccessType">
+            <Form.Item
+              label={t('pages.calculator.form.driverAccess')}
+              name="driverAccessType"
+            >
               <Radio.Group
                 options={[
-                  { label: 'Limited', value: 'LIMITED' },
-                  { label: 'No limits', value: 'NO_LIMITS' },
+                  {
+                    label: t('pages.calculator.form.driverAccessLimited'),
+                    value: 'LIMITED',
+                  },
+                  {
+                    label: t('pages.calculator.form.driverAccessNoLimits'),
+                    value: 'NO_LIMITS',
+                  },
                 ]}
               />
             </Form.Item>
 
-            <Form.Item label="Duration" name="durationId">
+            <Form.Item label={t('pages.calculator.form.duration')} name="durationId">
               <Select
                 options={data.durations.map((duration) => ({
                   value: duration.id,
-                  label: duration.nameEn,
+                  label: isRussian ? duration.nameRu : duration.nameEn,
                 }))}
               />
             </Form.Item>
 
-            <Form.Item label="Bonus-malus class" name="bonusMalusClass">
+            <Form.Item
+              label={t('pages.calculator.form.bonusMalusClass')}
+              name="bonusMalusClass"
+            >
               <Select
                 options={data.bonusMalus.map((item) => ({
                   value: item.class,
-                  label: `Class ${item.class}`,
+                  label: t('pages.calculator.form.bonusMalusClassValue', {
+                    value: item.class,
+                  }),
                 }))}
               />
             </Form.Item>
           </Form>
 
           {calculationResult && (
-            <Card size="small" title="Premium result">
+            <Card size="small" title={t('pages.calculator.result.title')}>
               <Space direction="vertical">
-                <Text strong>Total: {calculationResult.total} KGS</Text>
-                <Text>Base tariff: {calculationResult.breakdown.baseTariff}</Text>
-                <Text>Territory: {calculationResult.breakdown.territoryCoefficient}</Text>
-                <Text>Power: {calculationResult.breakdown.powerCoefficient}</Text>
-                <Text>
-                  Age/experience: {calculationResult.breakdown.ageExperienceCoefficient}
+                <Text strong>
+                  {t('pages.calculator.result.total')}: {calculationResult.total} KGS
                 </Text>
                 <Text>
-                  Driver access: {calculationResult.breakdown.driverAccessCoefficient}
+                  {t('pages.calculator.result.baseTariff')}:{' '}
+                  {calculationResult.breakdown.baseTariff}
                 </Text>
-                <Text>Duration: {calculationResult.breakdown.durationCoefficient}</Text>
                 <Text>
-                  Bonus-malus: {calculationResult.breakdown.bonusMalusCoefficient}
+                  {t('pages.calculator.result.territory')}:{' '}
+                  {calculationResult.breakdown.territoryCoefficient}
+                </Text>
+                <Text>
+                  {t('pages.calculator.result.power')}:{' '}
+                  {calculationResult.breakdown.powerCoefficient}
+                </Text>
+                <Text>
+                  {t('pages.calculator.result.ageExperience')}:{' '}
+                  {calculationResult.breakdown.ageExperienceCoefficient}
+                </Text>
+                <Text>
+                  {t('pages.calculator.result.driverAccess')}:{' '}
+                  {calculationResult.breakdown.driverAccessCoefficient}
+                </Text>
+                <Text>
+                  {t('pages.calculator.result.duration')}:{' '}
+                  {calculationResult.breakdown.durationCoefficient}
+                </Text>
+                <Text>
+                  {t('pages.calculator.result.bonusMalus')}:{' '}
+                  {calculationResult.breakdown.bonusMalusCoefficient}
                 </Text>
               </Space>
             </Card>
