@@ -1,3 +1,4 @@
+export { getDictionaries } from './api/getDictionaries'
 export type {
   BonusMalus,
   CarBrand,
