@@ -10,11 +10,16 @@ export const handlers = [
     return HttpResponse.json(dictionaries)
   }),
 
+
+
   http.get('/api/policies', async () => {
     await delay(500)
 
     return HttpResponse.json(policies)
+    //return HttpResponse.json({ message: 'Failed to load policies' }, { status: 500 })
   }),
+
+
 
   http.get('/api/policies/:id', async ({ params }) => {
     await delay(300)
