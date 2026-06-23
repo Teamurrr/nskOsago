@@ -16,25 +16,28 @@ export function CalculatorPage() {
   const { data, isLoading, error } = useDictionaries()
   const [form] = Form.useForm<PremiumCalculationInput>()
   const values = Form.useWatch([], form)
+  const currentValues = values ?? form.getFieldsValue()
+  const hasValidationErrors = form.getFieldsError().some((field) => field.errors.length > 0)
 
   const calculationResult =
     data &&
-    values?.regionId &&
-    typeof values.power === 'number' &&
-    typeof values.driverAge === 'number' &&
-    typeof values.driverExperience === 'number' &&
-    values.driverAccessType &&
-    values.durationId &&
-    typeof values.bonusMalusClass === 'number'
+    !hasValidationErrors &&
+    currentValues?.regionId &&
+    typeof currentValues.power === 'number' &&
+    typeof currentValues.driverAge === 'number' &&
+    typeof currentValues.driverExperience === 'number' &&
+    currentValues.driverAccessType &&
+    currentValues.durationId &&
+    typeof currentValues.bonusMalusClass === 'number'
       ? calculatePremium({
           input: {
-            regionId: values.regionId,
-            power: values.power,
-            driverAge: values.driverAge,
-            driverExperience: values.driverExperience,
-            driverAccessType: values.driverAccessType,
-            durationId: values.durationId,
-            bonusMalusClass: values.bonusMalusClass,
+            regionId: currentValues.regionId,
+            power: currentValues.power,
+            driverAge: currentValues.driverAge,
+            driverExperience: currentValues.driverExperience,
+            driverAccessType: currentValues.driverAccessType,
+            durationId: currentValues.durationId,
+            bonusMalusClass: currentValues.bonusMalusClass,
           },
           dictionaries: data,
         })

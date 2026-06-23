@@ -30,6 +30,12 @@ export const en = {
           bonusMalusClass: 'Bonus-malus class',
           bonusMalusClassValue: 'Class {{value}}',
         },
+        validation: {
+          required: 'Required field',
+          minPower: 'Power must be at least {{value}}',
+          minDriverAge: 'Driver age must be at least {{value}}',
+          minDriverExperience: 'Driver experience cannot be negative',
+        },
         result: {
           title: 'Premium result',
           total: 'Total',

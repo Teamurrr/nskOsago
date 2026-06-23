@@ -27,7 +27,11 @@ export function CalculatorForm({ dictionaries, form }: CalculatorFormProps) {
         bonusMalusClass: 3,
       }}
     >
-      <Form.Item label={t('pages.calculator.form.region')} name="regionId">
+      <Form.Item
+        label={t('pages.calculator.form.region')}
+        name="regionId"
+        rules={[{ required: true, message: t('pages.calculator.validation.required') }]}
+      >
         <Select
           options={dictionaries.regions.map((region) => ({
             value: region.id,
@@ -36,19 +40,56 @@ export function CalculatorForm({ dictionaries, form }: CalculatorFormProps) {
         />
       </Form.Item>
 
-      <Form.Item label={t('pages.calculator.form.power')} name="power">
+      <Form.Item
+        label={t('pages.calculator.form.power')}
+        name="power"
+        rules={[
+          { required: true, message: t('pages.calculator.validation.required') },
+          {
+            type: 'number',
+            min: 1,
+            message: t('pages.calculator.validation.minPower', { value: 1 }),
+          },
+        ]}
+      >
         <InputNumber min={1} style={{ width: '100%' }} />
       </Form.Item>
 
-      <Form.Item label={t('pages.calculator.form.driverAge')} name="driverAge">
+      <Form.Item
+        label={t('pages.calculator.form.driverAge')}
+        name="driverAge"
+        rules={[
+          { required: true, message: t('pages.calculator.validation.required') },
+          {
+            type: 'number',
+            min: 18,
+            message: t('pages.calculator.validation.minDriverAge', { value: 18 }),
+          },
+        ]}
+      >
         <InputNumber min={18} style={{ width: '100%' }} />
       </Form.Item>
 
-      <Form.Item label={t('pages.calculator.form.driverExperience')} name="driverExperience">
+      <Form.Item
+        label={t('pages.calculator.form.driverExperience')}
+        name="driverExperience"
+        rules={[
+          { required: true, message: t('pages.calculator.validation.required') },
+          {
+            type: 'number',
+            min: 0,
+            message: t('pages.calculator.validation.minDriverExperience'),
+          },
+        ]}
+      >
         <InputNumber min={0} style={{ width: '100%' }} />
       </Form.Item>
 
-      <Form.Item label={t('pages.calculator.form.driverAccess')} name="driverAccessType">
+      <Form.Item
+        label={t('pages.calculator.form.driverAccess')}
+        name="driverAccessType"
+        rules={[{ required: true, message: t('pages.calculator.validation.required') }]}
+      >
         <Radio.Group
           options={[
             {
@@ -63,7 +104,11 @@ export function CalculatorForm({ dictionaries, form }: CalculatorFormProps) {
         />
       </Form.Item>
 
-      <Form.Item label={t('pages.calculator.form.duration')} name="durationId">
+      <Form.Item
+        label={t('pages.calculator.form.duration')}
+        name="durationId"
+        rules={[{ required: true, message: t('pages.calculator.validation.required') }]}
+      >
         <Select
           options={dictionaries.durations.map((duration) => ({
             value: duration.id,
@@ -72,7 +117,11 @@ export function CalculatorForm({ dictionaries, form }: CalculatorFormProps) {
         />
       </Form.Item>
 
-      <Form.Item label={t('pages.calculator.form.bonusMalusClass')} name="bonusMalusClass">
+      <Form.Item
+        label={t('pages.calculator.form.bonusMalusClass')}
+        name="bonusMalusClass"
+        rules={[{ required: true, message: t('pages.calculator.validation.required') }]}
+      >
         <Select
           options={dictionaries.bonusMalus.map((item) => ({
             value: item.class,

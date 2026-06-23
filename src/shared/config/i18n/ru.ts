@@ -30,6 +30,13 @@ export const ru = {
           bonusMalusClass: 'Класс бонус-малус',
           bonusMalusClassValue: 'Класс {{value}}',
         },
+        validation: {
+  required: 'Обязательное поле',
+  minPower: 'Мощность должна быть не меньше {{value}}',
+  minDriverAge: 'Возраст водителя должен быть не меньше {{value}}',
+  minDriverExperience: 'Стаж водителя не может быть отрицательным',
+},
+
         result: {
           title: 'Результат расчета',
           total: 'Итого',
