@@ -1,10 +1,8 @@
 import { Alert, Card, Form, Space, Spin, Typography } from 'antd'
 import { useTranslation } from 'react-i18next'
 
-import {
-  calculatePremium,
-  type PremiumCalculationInput,
-} from '../../../features/calculate-premium'
+import { calculateAge, calculatePremium } from '../../../features/calculate-premium'
+import type { CalculatorFormValues } from '../model/types'
 import { useDictionaries } from '../model/useDictionaries'
 import { CalculatorForm } from './CalculatorForm'
 import { PremiumBreakdownCard } from './PremiumBreakdownCard'
@@ -14,7 +12,7 @@ const { Paragraph, Title } = Typography
 export function CalculatorPage() {
   const { t } = useTranslation()
   const { data, isLoading, error } = useDictionaries()
-  const [form] = Form.useForm<PremiumCalculationInput>()
+  const [form] = Form.useForm<CalculatorFormValues>()
   const values = Form.useWatch([], form)
   const currentValues = values ?? form.getFieldsValue()
   const hasValidationErrors = form.getFieldsError().some((field) => field.errors.length > 0)
@@ -22,16 +20,18 @@ export function CalculatorPage() {
   const calculationInput =
     !hasValidationErrors &&
     currentValues?.regionId &&
+    currentValues.vehicleTypeId &&
     typeof currentValues.power === 'number' &&
-    typeof currentValues.driverAge === 'number' &&
+    currentValues.ownerBirthDate &&
     typeof currentValues.driverExperience === 'number' &&
     currentValues.driverAccessType &&
     currentValues.durationId &&
     typeof currentValues.bonusMalusClass === 'number'
       ? {
+          vehicleTypeId: currentValues.vehicleTypeId,
           regionId: currentValues.regionId,
           power: currentValues.power,
-          driverAge: currentValues.driverAge,
+          driverAge: calculateAge(currentValues.ownerBirthDate.toDate()),
           driverExperience: currentValues.driverExperience,
           driverAccessType: currentValues.driverAccessType,
           durationId: currentValues.durationId,

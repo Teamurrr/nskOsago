@@ -10,6 +10,12 @@ export interface PowerTier {
   k: number
 }
 
+export interface VehicleType {
+  id: string
+  nameRu: string
+  nameEn: string
+}
+
 export interface InsuranceDuration {
   id: string
   nameRu: string
@@ -31,6 +37,7 @@ export interface CarBrand {
 
 export interface OsagoDictionaries {
   regions: Region[]
+  vehicleTypes: VehicleType[]
   powerTiers: PowerTier[]
   durations: InsuranceDuration[]
   bonusMalus: BonusMalus[]

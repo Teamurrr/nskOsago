@@ -12,6 +12,12 @@ export const dictionaries: OsagoDictionaries = {
     },
     { id: 'other', nameRu: 'Прочее', nameEn: 'Other', kt: 1.0 },
   ],
+  vehicleTypes: [
+    { id: 'passenger_car', nameRu: 'Легковой автомобиль', nameEn: 'Passenger car' },
+    { id: 'truck', nameRu: 'Грузовой автомобиль', nameEn: 'Truck' },
+    { id: 'bus', nameRu: 'Автобус', nameEn: 'Bus' },
+    { id: 'motorcycle', nameRu: 'Мотоцикл', nameEn: 'Motorcycle' },
+  ],
   powerTiers: [
     { max: 100, k: 1.0 },
     { max: 150, k: 1.3 },
@@ -22,7 +28,7 @@ export const dictionaries: OsagoDictionaries = {
     { id: 'half', nameRu: '6 месяцев', nameEn: '6 months', months: 6, k: 0.7 },
     { id: 'quarter', nameRu: '3 месяца', nameEn: '3 months', months: 3, k: 0.5 },
   ],
-    bonusMalus: [
+  bonusMalus: [
     { class: 0, k: 2.45 },
     { class: 1, k: 1.55 },
     { class: 2, k: 1.4 },

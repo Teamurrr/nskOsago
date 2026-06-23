@@ -6,4 +6,5 @@ export type {
   OsagoDictionaries,
   PowerTier,
   Region,
+  VehicleType,
 } from './model/types'

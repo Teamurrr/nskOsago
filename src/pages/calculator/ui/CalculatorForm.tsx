@@ -1,12 +1,14 @@
-import { Form, InputNumber, Radio, Select } from 'antd'
+import { DatePicker, Form, InputNumber, Radio, Select } from 'antd'
+import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 
 import type { OsagoDictionaries } from '../../../entities/dictionary'
-import type { PremiumCalculationInput } from '../../../features/calculate-premium'
+import { calculateAge } from '../../../features/calculate-premium'
+import type { CalculatorFormValues } from '../model/types'
 
 interface CalculatorFormProps {
   dictionaries: OsagoDictionaries
-  form: ReturnType<typeof Form.useForm<PremiumCalculationInput>>[0]
+  form: ReturnType<typeof Form.useForm<CalculatorFormValues>>[0]
 }
 
 export function CalculatorForm({ dictionaries, form }: CalculatorFormProps) {
@@ -14,13 +16,14 @@ export function CalculatorForm({ dictionaries, form }: CalculatorFormProps) {
   const isRussian = i18n.language === 'ru'
 
   return (
-    <Form<PremiumCalculationInput>
+    <Form<CalculatorFormValues>
       form={form}
       layout="vertical"
       initialValues={{
         regionId: dictionaries.regions[0]?.id,
+        vehicleTypeId: dictionaries.vehicleTypes[0]?.id,
         power: 100,
-        driverAge: 30,
+        ownerBirthDate: dayjs().subtract(30, 'year'),
         driverExperience: 5,
         driverAccessType: 'LIMITED',
         durationId: dictionaries.durations[0]?.id,
@@ -41,6 +44,19 @@ export function CalculatorForm({ dictionaries, form }: CalculatorFormProps) {
       </Form.Item>
 
       <Form.Item
+        label={t('pages.calculator.form.vehicleType')}
+        name="vehicleTypeId"
+        rules={[{ required: true, message: t('pages.calculator.validation.required') }]}
+      >
+        <Select
+          options={dictionaries.vehicleTypes.map((vehicleType) => ({
+            value: vehicleType.id,
+            label: isRussian ? vehicleType.nameRu : vehicleType.nameEn,
+          }))}
+        />
+      </Form.Item>
+
+      <Form.Item
         label={t('pages.calculator.form.power')}
         name="power"
         rules={[
@@ -56,18 +72,28 @@ export function CalculatorForm({ dictionaries, form }: CalculatorFormProps) {
       </Form.Item>
 
       <Form.Item
-        label={t('pages.calculator.form.driverAge')}
-        name="driverAge"
+        label={t('pages.calculator.form.ownerBirthDate')}
+        name="ownerBirthDate"
         rules={[
           { required: true, message: t('pages.calculator.validation.required') },
           {
-            type: 'number',
-            min: 18,
-            message: t('pages.calculator.validation.minDriverAge', { value: 18 }),
+            validator: (_, value: Dayjs | undefined) => {
+              if (!value || calculateAge(value.toDate()) >= 18) {
+                return Promise.resolve()
+              }
+
+              return Promise.reject(
+                new Error(t('pages.calculator.validation.minOwnerAge', { value: 18 })),
+              )
+            },
           },
         ]}
       >
-        <InputNumber min={18} style={{ width: '100%' }} />
+        <DatePicker
+          disabledDate={(current) => current.isAfter(dayjs(), 'day')}
+          format="DD.MM.YYYY"
+          style={{ width: '100%' }}
+        />
       </Form.Item>
 
       <Form.Item
