@@ -45,7 +45,15 @@ export const en = {
           ageExperience: 'Age/experience',
           driverAccess: 'Driver access',
           duration: 'Duration',
-          bonusMalus: 'Bonus-malus',
+          formula: 'Formula',
+          powerTierUpTo: 'up to {{value}} hp',
+          powerTierAbove: 'above 150 hp',
+          bonusMalusClass: 'KBM (claim-free bonus)',
+          bonusMalus: 'KBM (claim-free bonus)',
+          ageExperienceYoungAndInexperienced:
+            'younger than 25 and experience below 3 years',
+          ageExperiencePartialRisk: 'one of the risk conditions is met',
+          ageExperienceStandard: 'standard conditions',
         },
       },
       newPolicy: {

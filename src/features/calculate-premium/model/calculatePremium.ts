@@ -20,12 +20,12 @@ function getBonusMalusCoefficient(bonusMalusClass: number, bonusMalus: BonusMalu
 }
 
 function getAgeExperienceCoefficient(driverAge: number, driverExperience: number) {
-  if (driverAge < 22 && driverExperience < 3) {
+  if (driverAge < 25 && driverExperience < 3) {
     return 1.8
   }
 
-  if (driverAge < 22 || driverExperience < 3) {
-    return 1.6
+  if (driverAge < 25 || driverExperience < 3) {
+    return 1.5
   }
 
   return 1

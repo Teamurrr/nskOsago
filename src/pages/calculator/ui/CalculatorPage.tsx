@@ -19,8 +19,7 @@ export function CalculatorPage() {
   const currentValues = values ?? form.getFieldsValue()
   const hasValidationErrors = form.getFieldsError().some((field) => field.errors.length > 0)
 
-  const calculationResult =
-    data &&
+  const calculationInput =
     !hasValidationErrors &&
     currentValues?.regionId &&
     typeof currentValues.power === 'number' &&
@@ -29,16 +28,21 @@ export function CalculatorPage() {
     currentValues.driverAccessType &&
     currentValues.durationId &&
     typeof currentValues.bonusMalusClass === 'number'
+      ? {
+          regionId: currentValues.regionId,
+          power: currentValues.power,
+          driverAge: currentValues.driverAge,
+          driverExperience: currentValues.driverExperience,
+          driverAccessType: currentValues.driverAccessType,
+          durationId: currentValues.durationId,
+          bonusMalusClass: currentValues.bonusMalusClass,
+        }
+      : null
+
+  const calculationResult =
+    data && calculationInput
       ? calculatePremium({
-          input: {
-            regionId: currentValues.regionId,
-            power: currentValues.power,
-            driverAge: currentValues.driverAge,
-            driverExperience: currentValues.driverExperience,
-            driverAccessType: currentValues.driverAccessType,
-            durationId: currentValues.durationId,
-            bonusMalusClass: currentValues.bonusMalusClass,
-          },
+          input: calculationInput,
           dictionaries: data,
         })
       : null
@@ -55,7 +59,14 @@ export function CalculatorPage() {
       {data && (
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           <CalculatorForm dictionaries={data} form={form} />
-          {calculationResult && <PremiumBreakdownCard result={calculationResult} />}
+
+          {calculationResult && calculationInput && (
+            <PremiumBreakdownCard
+              result={calculationResult}
+              input={calculationInput}
+              dictionaries={data}
+            />
+          )}
         </Space>
       )}
     </Card>

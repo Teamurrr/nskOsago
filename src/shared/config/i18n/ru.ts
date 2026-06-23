@@ -31,12 +31,11 @@ export const ru = {
           bonusMalusClassValue: 'Класс {{value}}',
         },
         validation: {
-  required: 'Обязательное поле',
-  minPower: 'Мощность должна быть не меньше {{value}}',
-  minDriverAge: 'Возраст водителя должен быть не меньше {{value}}',
-  minDriverExperience: 'Стаж водителя не может быть отрицательным',
-},
-
+          required: 'Обязательное поле',
+          minPower: 'Мощность должна быть не меньше {{value}}',
+          minDriverAge: 'Возраст водителя должен быть не меньше {{value}}',
+          minDriverExperience: 'Стаж водителя не может быть отрицательным',
+        },
         result: {
           title: 'Результат расчета',
           total: 'Итого',
@@ -46,7 +45,15 @@ export const ru = {
           ageExperience: 'Возраст/стаж',
           driverAccess: 'Допуск',
           duration: 'Срок',
-          bonusMalus: 'Бонус-малус',
+          bonusMalusClass: 'КБМ (бонус безаварийности)',
+          bonusMalus: 'КБМ (бонус безаварийности)',
+          formula: 'Формула',
+          powerTierUpTo: 'до {{value}} л.с.',
+          powerTierAbove: 'свыше 150 л.с.',
+          ageExperienceYoungAndInexperienced:
+            'моложе 25 лет и стаж меньше 3 лет',
+          ageExperiencePartialRisk: 'выполняется одно из условий риска',
+          ageExperienceStandard: 'стандартные условия',
         },
       },
       newPolicy: {
