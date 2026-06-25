@@ -99,12 +99,42 @@ export function CalculatorForm({ dictionaries, form }: CalculatorFormProps) {
       <Form.Item
         label={t('pages.calculator.form.driverExperience')}
         name="driverExperience"
+        dependencies={['ownerBirthDate']}
         rules={[
           { required: true, message: t('pages.calculator.validation.required') },
           {
-            type: 'number',
-            min: 0,
-            message: t('pages.calculator.validation.minDriverExperience'),
+            validator: (_, value: number | null | undefined) => {
+              if (value === null || value === undefined) {
+                return Promise.resolve()
+              }
+
+              if (value < 0) {
+                return Promise.reject(
+                  new Error(t('pages.calculator.validation.minDriverExperience')),
+                )
+              }
+
+              const ownerBirthDate = form.getFieldValue('ownerBirthDate')
+
+              if (!ownerBirthDate) {
+                return Promise.resolve()
+              }
+
+              const ownerAge = calculateAge(ownerBirthDate.toDate())
+              const maxExperience = Math.max(ownerAge - 17, 0)
+
+              if (value > maxExperience) {
+                return Promise.reject(
+                  new Error(
+                    t('pages.calculator.validation.maxDriverExperience', {
+                      value: maxExperience,
+                    }),
+                  ),
+                )
+              }
+
+              return Promise.resolve()
+            },
           },
         ]}
       >

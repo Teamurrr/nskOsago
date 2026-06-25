@@ -36,6 +36,7 @@ export const ru = {
           minPower: 'Мощность должна быть не меньше {{value}}',
           minOwnerAge: 'Собственнику должно быть не меньше {{value}} лет',
           minDriverExperience: 'Стаж водителя не может быть отрицательным',
+          maxDriverExperience: 'Стаж водителя не может быть больше {{value}} лет',
         },
         result: {
           title: 'Результат расчета',

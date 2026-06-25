@@ -36,6 +36,7 @@ export const en = {
           minPower: 'Power must be at least {{value}}',
           minOwnerAge: 'Owner must be at least {{value}} years old',
           minDriverExperience: 'Driver experience cannot be negative',
+          maxDriverExperience: 'Driver experience cannot be greater than {{value}} years',
         },
         result: {
           title: 'Premium result',
