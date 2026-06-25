@@ -1,3 +1,4 @@
+export { getDictionaries } from './api/getDictionaries'
 export type {
   BonusMalus,
   CarBrand,
@@ -5,4 +6,5 @@ export type {
   OsagoDictionaries,
   PowerTier,
   Region,
+  VehicleType,
 } from './model/types'
