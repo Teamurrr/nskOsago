@@ -6,10 +6,11 @@ import { useTranslation } from 'react-i18next'
 import { calculateAge, calculatePremium } from '../../../features/calculate-premium'
 import { useDictionaries } from '../../calculator/model/useDictionaries'
 import { PremiumBreakdownCard } from '../../calculator/ui/PremiumBreakdownCard'
+import { ConfirmationStep } from './ConfirmationPage'
 import { ParticipantsStep, type ParticipantsStepValues } from './ParticipantStep'
 import { VehicleStep, type VehicleStepValues } from './VehicleStep'
 
-const { Paragraph, Text, Title } = Typography
+const { Paragraph, Title } = Typography
 
 interface PolicyCreateFormValues extends VehicleStepValues, ParticipantsStepValues {
   durationId: string
@@ -34,11 +35,18 @@ const steps = [
   },
 ]
 
+function generatePolicyNumber() {
+  const randomPart = Math.floor(Math.random() * 900000 + 100000)
+
+  return `OSAGO-2026-${randomPart}`
+}
+
 export function PolicyCreatePage() {
   const { t } = useTranslation()
   const { data: dictionaries, isLoading, error } = useDictionaries()
   const [form] = Form.useForm<PolicyCreateFormValues>()
   const [currentStep, setCurrentStep] = useState(0)
+  const [createdPolicyNumber, setCreatedPolicyNumber] = useState<string | null>(null)
 
   const formValues = Form.useWatch([], form)
   const currentValues = formValues ?? form.getFieldsValue()
@@ -105,6 +113,10 @@ export function PolicyCreatePage() {
 
   const handlePrevious = () => {
     setCurrentStep((step) => Math.max(step - 1, 0))
+  }
+
+  const handleCreateDraft = () => {
+    setCreatedPolicyNumber(generatePolicyNumber())
   }
 
   if (isLoading) {
@@ -198,22 +210,30 @@ export function PolicyCreatePage() {
           )}
 
           {currentStep === 3 && (
-            <Card size="small">
-              <Title level={4}>Подтверждение</Title>
-              <Text type="secondary">Здесь будет сводка и создание черновика.</Text>
-            </Card>
+            <ConfirmationStep
+              values={currentValues}
+              dictionaries={dictionaries}
+              calculationInput={calculationInput}
+              calculationResult={calculationResult}
+              createdPolicyNumber={createdPolicyNumber}
+              onCreateDraft={handleCreateDraft}
+            />
           )}
         </Form>
 
-        <Space style={{ justifyContent: 'space-between', width: '100%' }}>
-          <Button disabled={isFirstStep} onClick={handlePrevious}>
-            Назад
-          </Button>
+        {!createdPolicyNumber && (
+          <Space style={{ justifyContent: 'space-between', width: '100%' }}>
+            <Button disabled={isFirstStep} onClick={handlePrevious}>
+              Назад
+            </Button>
 
-          <Button type="primary" onClick={handleNext}>
-            {isLastStep ? 'Создать черновик' : 'Далее'}
-          </Button>
-        </Space>
+            {!isLastStep && (
+              <Button type="primary" onClick={handleNext}>
+                Далее
+              </Button>
+            )}
+          </Space>
+        )}
       </Space>
     </Card>
   )
