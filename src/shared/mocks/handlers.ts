@@ -1,7 +1,45 @@
-import { delay,http, HttpResponse } from 'msw'
+import { delay, http, HttpResponse } from 'msw'
 
+import type { InspectionPhotoPayload } from '../../entities/policy'
 import { dictionaries } from '../config/mock-data/dictionaries'
 import { policies } from '../config/mock-data/policies'
+
+function getInspectionVerdict(confidence: number) {
+  if (confidence >= 85) {
+    return {
+      status: 'APPROVED' as const,
+      issues: [],
+    }
+  }
+
+  if (confidence < 35) {
+    return {
+      status: 'REJECTED' as const,
+      issues: ['Photo quality is too low for automatic verification'],
+    }
+  }
+
+  return {
+    status: 'MANUAL_REVIEW' as const,
+    issues: ['Front bumper photo is blurry'],
+  }
+}
+
+function calculateConfidence(photos: InspectionPhotoPayload[]) {
+  const totalSize = photos.reduce((sum, photo) => sum + photo.size, 0)
+  const hasEnoughPhotos = photos.length >= 3
+  const hasLargeEnoughFiles = totalSize > 150_000
+
+  if (!hasEnoughPhotos) {
+    return 28
+  }
+
+  if (!hasLargeEnoughFiles) {
+    return 62
+  }
+
+  return 91
+}
 
 export const handlers = [
   http.get('/api/dictionaries', async () => {
@@ -10,16 +48,11 @@ export const handlers = [
     return HttpResponse.json(dictionaries)
   }),
 
-
-
   http.get('/api/policies', async () => {
     await delay(500)
 
     return HttpResponse.json(policies)
-    //return HttpResponse.json({ message: 'Failed to load policies' }, { status: 500 })
   }),
-
-
 
   http.get('/api/policies/:id', async ({ params }) => {
     await delay(300)
@@ -32,4 +65,40 @@ export const handlers = [
 
     return HttpResponse.json(policy)
   }),
+
+   http.post('/api/policies/:id/inspection/verify', async ({ params, request }) => {
+    await delay(1200)
+
+    const policyId = String(params.id)
+    const policy = policies.find((item) => item.id === policyId)
+
+    if (!policy) {
+      return HttpResponse.json({ message: 'Policy not found' }, { status: 404 })
+    }
+
+    let photos: InspectionPhotoPayload[] = []
+
+    try {
+      const body = (await request.json()) as { photos?: InspectionPhotoPayload[] }
+      photos = Array.isArray(body.photos) ? body.photos : []
+    } catch {
+      return HttpResponse.json({ message: 'Invalid request body' }, { status: 400 })
+    }
+
+    if (photos.length === 0) {
+      return HttpResponse.json(
+        { message: 'At least one inspection photo is required' },
+        { status: 400 },
+      )
+    }
+
+    const confidence = calculateConfidence(photos)
+    const verdict = getInspectionVerdict(confidence)
+
+    return HttpResponse.json({
+      confidence,
+      ...verdict,
+    })
+  }),
+
 ]
