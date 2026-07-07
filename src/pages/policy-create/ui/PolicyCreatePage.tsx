@@ -18,25 +18,6 @@ interface PolicyCreateFormValues extends VehicleStepValues, ParticipantsStepValu
   durationId: string
 }
 
-const steps = [
-  {
-    title: 'Авто',
-    description: 'Данные автомобиля',
-  },
-  {
-    title: 'Участники',
-    description: 'Собственник и водители',
-  },
-  {
-    title: 'Расчёт',
-    description: 'Разбивка премии',
-  },
-  {
-    title: 'Подтверждение',
-    description: 'Создание черновика',
-  },
-]
-
 function generatePolicyNumber() {
   const randomPart = Math.floor(Math.random() * 900000 + 100000)
 
@@ -48,7 +29,7 @@ function calculateYearsSince(date: Date, currentDate = new Date()) {
 }
 
 export function PolicyCreatePage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { data: dictionaries, isLoading, error } = useDictionaries()
   const [form] = Form.useForm<PolicyCreateFormValues>()
   const [currentStep, setCurrentStep] = useState(0)
@@ -97,6 +78,25 @@ export function PolicyCreatePage() {
       : null
 
   const isFirstStep = currentStep === 0
+  const isRussian = i18n.language === 'ru'
+  const steps = [
+    {
+      title: t('pages.newPolicy.steps.vehicle.title'),
+      description: t('pages.newPolicy.steps.vehicle.description'),
+    },
+    {
+      title: t('pages.newPolicy.steps.participants.title'),
+      description: t('pages.newPolicy.steps.participants.description'),
+    },
+    {
+      title: t('pages.newPolicy.steps.calculation.title'),
+      description: t('pages.newPolicy.steps.calculation.description'),
+    },
+    {
+      title: t('pages.newPolicy.steps.confirmation.title'),
+      description: t('pages.newPolicy.steps.confirmation.description'),
+    },
+  ]
   const isLastStep = currentStep === steps.length - 1
 
   const saveCurrentFormValues = () => {
@@ -204,7 +204,7 @@ export function PolicyCreatePage() {
     return (
       <Alert
         message={t('pages.newPolicy.title')}
-        description={error ?? 'Не удалось загрузить справочники'}
+        description={error ?? t('pages.newPolicy.loadingError')}
         type="error"
         showIcon
       />
@@ -261,14 +261,16 @@ export function PolicyCreatePage() {
           {currentStep === 2 && (
             <Space direction="vertical" size="middle" style={{ width: '100%' }}>
               <Form.Item
-                label="Срок страхования"
+                label={t('pages.newPolicy.calculation.duration')}
                 name="durationId"
-                rules={[{ required: true, message: 'Выберите срок страхования' }]}
+                rules={[
+                  { required: true, message: t('pages.newPolicy.validation.selectDuration') },
+                ]}
               >
                 <Select
                   options={dictionaries.durations.map((duration) => ({
                     value: duration.id,
-                    label: duration.nameRu,
+                    label: isRussian ? duration.nameRu : duration.nameEn,
                   }))}
                 />
               </Form.Item>
@@ -298,12 +300,12 @@ export function PolicyCreatePage() {
         {!createdPolicyNumber && (
           <Space style={{ justifyContent: 'space-between', width: '100%' }}>
             <Button disabled={isFirstStep} onClick={handlePrevious}>
-              Назад
+              {t('pages.newPolicy.actions.back')}
             </Button>
 
             {!isLastStep && (
               <Button type="primary" onClick={handleNext}>
-                Далее
+                {t('pages.newPolicy.actions.next')}
               </Button>
             )}
           </Space>

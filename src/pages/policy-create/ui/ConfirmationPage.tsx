@@ -1,4 +1,5 @@
 import { Button, Card, Descriptions, Result, Space, Typography } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 import type { OsagoDictionaries } from '../../../entities/dictionary'
 import type {
@@ -27,6 +28,8 @@ export function ConfirmationStep({
   createdPolicyNumber,
   onCreateDraft,
 }: ConfirmationStepProps) {
+  const { t, i18n } = useTranslation()
+  const isRussian = i18n.language === 'ru'
   const brand = dictionaries.carBrands.find((item) => item.id === values.brandId)
   const region = dictionaries.regions.find((item) => item.id === values.regionId)
   const duration = dictionaries.durations.find((item) => item.id === values.durationId)
@@ -35,8 +38,10 @@ export function ConfirmationStep({
     return (
       <Result
         status="success"
-        title="Черновик полиса создан"
-        subTitle={`Номер полиса: ${createdPolicyNumber}`}
+        title={t('pages.newPolicy.confirmation.successTitle')}
+        subTitle={t('pages.newPolicy.confirmation.policyNumber', {
+          value: createdPolicyNumber,
+        })}
       />
     )
   }
@@ -44,42 +49,62 @@ export function ConfirmationStep({
   return (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
       <Card size="small">
-        <Title level={4}>Автомобиль</Title>
+        <Title level={4}>{t('pages.newPolicy.confirmation.vehicle')}</Title>
 
         <Descriptions column={1} size="small">
-          <Descriptions.Item label="Марка">{brand?.name}</Descriptions.Item>
-          <Descriptions.Item label="Модель">{values.model}</Descriptions.Item>
-          <Descriptions.Item label="Госномер">{values.registrationNumber}</Descriptions.Item>
+          <Descriptions.Item label={t('pages.newPolicy.vehicle.brand')}>
+            {brand?.name}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.newPolicy.vehicle.model')}>
+            {values.model}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.newPolicy.vehicle.registrationNumber')}>
+            {values.registrationNumber}
+          </Descriptions.Item>
           <Descriptions.Item label="VIN">{values.vin}</Descriptions.Item>
-          <Descriptions.Item label="Год выпуска">{values.year}</Descriptions.Item>
-          <Descriptions.Item label="Мощность">{values.power}</Descriptions.Item>
-          <Descriptions.Item label="Регион">{region?.nameRu}</Descriptions.Item>
+          <Descriptions.Item label={t('pages.newPolicy.vehicle.year')}>
+            {values.year}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.newPolicy.vehicle.power')}>
+            {values.power}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.newPolicy.vehicle.region')}>
+            {isRussian ? region?.nameRu : region?.nameEn}
+          </Descriptions.Item>
         </Descriptions>
       </Card>
 
       <Card size="small">
-        <Title level={4}>Собственник</Title>
+        <Title level={4}>{t('pages.newPolicy.confirmation.owner')}</Title>
 
         <Descriptions column={1} size="small">
-          <Descriptions.Item label="Имя">{values.owner?.firstName}</Descriptions.Item>
-          <Descriptions.Item label="Фамилия">{values.owner?.lastName}</Descriptions.Item>
-          <Descriptions.Item label="ИНН">{values.owner?.personalId}</Descriptions.Item>
-          <Descriptions.Item label="Дата рождения">
+          <Descriptions.Item label={t('pages.newPolicy.participants.firstName')}>
+            {values.owner?.firstName}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.newPolicy.participants.lastName')}>
+            {values.owner?.lastName}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.newPolicy.participants.personalId')}>
+            {values.owner?.personalId}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.newPolicy.participants.dateOfBirth')}>
             {values.owner?.dateOfBirth?.format('DD.MM.YYYY')}
           </Descriptions.Item>
         </Descriptions>
       </Card>
 
       <Card size="small">
-        <Title level={4}>Водители</Title>
+        <Title level={4}>{t('pages.newPolicy.confirmation.drivers')}</Title>
 
         <Descriptions column={1} size="small">
-          <Descriptions.Item label="Тип допуска">
-            {values.driverAccessType === 'NO_LIMITS' ? 'Без ограничений' : 'Ограниченный список'}
+          <Descriptions.Item label={t('pages.newPolicy.confirmation.accessType')}>
+            {values.driverAccessType === 'NO_LIMITS'
+              ? t('pages.newPolicy.participants.noLimits')
+              : t('pages.newPolicy.participants.limited')}
           </Descriptions.Item>
 
           {values.driverAccessType === 'LIMITED' && (
-            <Descriptions.Item label="Количество водителей">
+            <Descriptions.Item label={t('pages.newPolicy.confirmation.driversCount')}>
               {values.drivers?.length ?? 0}
             </Descriptions.Item>
           )}
@@ -87,26 +112,28 @@ export function ConfirmationStep({
       </Card>
 
       <Card size="small">
-        <Title level={4}>Расчёт</Title>
+        <Title level={4}>{t('pages.newPolicy.confirmation.calculation')}</Title>
 
         <Descriptions column={1} size="small">
-          <Descriptions.Item label="Срок">{duration?.nameRu}</Descriptions.Item>
-          <Descriptions.Item label="Премия">
-            {calculationResult ? `${calculationResult.total} KGS` : 'Не рассчитано'}
+          <Descriptions.Item label={t('pages.newPolicy.confirmation.duration')}>
+            {isRussian ? duration?.nameRu : duration?.nameEn}
           </Descriptions.Item>
-          <Descriptions.Item label="КБМ">
+          <Descriptions.Item label={t('pages.newPolicy.confirmation.premium')}>
+            {calculationResult
+              ? `${calculationResult.total} KGS`
+              : t('pages.newPolicy.confirmation.notCalculated')}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.newPolicy.participants.bonusMalusClass')}>
             {calculationInput?.bonusMalusClass ?? '-'}
           </Descriptions.Item>
         </Descriptions>
       </Card>
 
       <Button type="primary" size="large" onClick={onCreateDraft}>
-        Создать черновик
+        {t('pages.newPolicy.actions.createDraft')}
       </Button>
 
-      <Text type="secondary">
-        После создания черновика будет сгенерирован демо-номер полиса.
-      </Text>
+      <Text type="secondary">{t('pages.newPolicy.confirmation.hint')}</Text>
     </Space>
   )
 }

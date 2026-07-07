@@ -1,6 +1,7 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Card, DatePicker, Form, Input, InputNumber, Radio, Space, Typography } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
+import { useTranslation } from 'react-i18next'
 
 const { Title } = Typography
 
@@ -24,44 +25,45 @@ export interface ParticipantsStepValues {
 }
 
 export function ParticipantsStep() {
+  const { t } = useTranslation()
   const driverAccessType = Form.useWatch('driverAccessType')
 
   return (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
       <Card size="small">
-        <Title level={4}>Собственник</Title>
+        <Title level={4}>{t('pages.newPolicy.participants.owner')}</Title>
 
         <Form.Item
-          label="Имя"
+          label={t('pages.newPolicy.participants.firstName')}
           name={['owner', 'firstName']}
-          rules={[{ required: true, message: 'Введите имя' }]}
+          rules={[{ required: true, message: t('pages.newPolicy.validation.enterFirstName') }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="Фамилия"
+          label={t('pages.newPolicy.participants.lastName')}
           name={['owner', 'lastName']}
-          rules={[{ required: true, message: 'Введите фамилию' }]}
+          rules={[{ required: true, message: t('pages.newPolicy.validation.enterLastName') }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="ИНН"
+          label={t('pages.newPolicy.participants.personalId')}
           name={['owner', 'personalId']}
           rules={[
-            { required: true, message: 'Введите ИНН' },
-            { pattern: /^\d{14}$/, message: 'ИНН должен содержать 14 цифр' },
+            { required: true, message: t('pages.newPolicy.validation.enterPersonalId') },
+            { pattern: /^\d{14}$/, message: t('pages.newPolicy.validation.personalIdFormat') },
           ]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="Дата рождения"
+          label={t('pages.newPolicy.participants.dateOfBirth')}
           name={['owner', 'dateOfBirth']}
-          rules={[{ required: true, message: 'Введите дату рождения' }]}
+          rules={[{ required: true, message: t('pages.newPolicy.validation.enterBirthDate') }]}
         >
           <DatePicker
             format="DD.MM.YYYY"
@@ -72,16 +74,16 @@ export function ParticipantsStep() {
       </Card>
 
       <Card size="small">
-        <Title level={4}>Допуск водителей</Title>
+        <Title level={4}>{t('pages.newPolicy.participants.driversAccess')}</Title>
 
         <Form.Item
           name="driverAccessType"
-          rules={[{ required: true, message: 'Выберите тип допуска' }]}
+          rules={[{ required: true, message: t('pages.newPolicy.validation.selectAccessType') }]}
         >
           <Radio.Group
             options={[
-              { label: 'Ограниченный список', value: 'LIMITED' },
-              { label: 'Без ограничений', value: 'NO_LIMITS' },
+              { label: t('pages.newPolicy.participants.limited'), value: 'LIMITED' },
+              { label: t('pages.newPolicy.participants.noLimits'), value: 'NO_LIMITS' },
             ]}
           />
         </Form.Item>
@@ -89,7 +91,7 @@ export function ParticipantsStep() {
 
       {driverAccessType !== 'NO_LIMITS' && (
         <Card size="small">
-          <Title level={4}>Водители</Title>
+          <Title level={4}>{t('pages.newPolicy.participants.drivers')}</Title>
 
           <Form.List
             name="drivers"
@@ -97,11 +99,11 @@ export function ParticipantsStep() {
               {
                 validator: async (_, drivers: DriverStepValues[] | undefined) => {
                   if (!drivers || drivers.length < 1) {
-                    throw new Error('Добавьте минимум одного водителя')
+                    throw new Error(t('pages.newPolicy.validation.minOneDriver'))
                   }
 
                   if (drivers.length > 4) {
-                    throw new Error('Можно добавить максимум 4 водителей')
+                    throw new Error(t('pages.newPolicy.validation.maxFourDrivers'))
                   }
                 },
               },
@@ -113,7 +115,7 @@ export function ParticipantsStep() {
                   <Card
                     key={field.key}
                     size="small"
-                    title={`Водитель ${index + 1}`}
+                    title={t('pages.newPolicy.participants.driver', { value: index + 1 })}
                     extra={
                       fields.length > 1 ? (
                         <Button
@@ -126,56 +128,45 @@ export function ParticipantsStep() {
                     }
                   >
                     <Form.Item
-                      label="Имя"
+                      label={t('pages.newPolicy.participants.firstName')}
                       name={[field.name, 'firstName']}
-                      rules={[{ required: true, message: 'Введите имя' }]}
-                    >
-                      <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                      label="Фамилия"
-                      name={[field.name, 'lastName']}
-                      rules={[{ required: true, message: 'Введите фамилию' }]}
-                    >
-                      <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                      label="ИНН"
-                      name={[field.name, 'personalId']}
                       rules={[
-                        { required: true, message: 'Введите ИНН' },
-                        { pattern: /^\d{14}$/, message: 'ИНН должен содержать 14 цифр' },
+                        { required: true, message: t('pages.newPolicy.validation.enterFirstName') },
                       ]}
                     >
                       <Input />
                     </Form.Item>
 
                     <Form.Item
-                      label="Дата рождения"
-                      name={[field.name, 'dateOfBirth']}
-                      rules={[{ required: true, message: 'Введите дату рождения' }]}
-                    >
-                      <DatePicker
-                        format="DD.MM.YYYY"
-                        disabledDate={(current) => current.isAfter(dayjs(), 'day')}
-                        style={{ width: '100%' }}
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      label="Номер прав"
-                      name={[field.name, 'licenseNumber']}
-                      rules={[{ required: true, message: 'Введите номер прав' }]}
+                      label={t('pages.newPolicy.participants.lastName')}
+                      name={[field.name, 'lastName']}
+                      rules={[
+                        { required: true, message: t('pages.newPolicy.validation.enterLastName') },
+                      ]}
                     >
                       <Input />
                     </Form.Item>
 
                     <Form.Item
-                      label="Дата выдачи прав"
-                      name={[field.name, 'licenseIssuedAt']}
-                      rules={[{ required: true, message: 'Введите дату выдачи прав' }]}
+                      label={t('pages.newPolicy.participants.personalId')}
+                      name={[field.name, 'personalId']}
+                      rules={[
+                        { required: true, message: t('pages.newPolicy.validation.enterPersonalId') },
+                        {
+                          pattern: /^\d{14}$/,
+                          message: t('pages.newPolicy.validation.personalIdFormat'),
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                      label={t('pages.newPolicy.participants.dateOfBirth')}
+                      name={[field.name, 'dateOfBirth']}
+                      rules={[
+                        { required: true, message: t('pages.newPolicy.validation.enterBirthDate') },
+                      ]}
                     >
                       <DatePicker
                         format="DD.MM.YYYY"
@@ -185,9 +176,39 @@ export function ParticipantsStep() {
                     </Form.Item>
 
                     <Form.Item
-                      label="КБМ"
+                      label={t('pages.newPolicy.participants.licenseNumber')}
+                      name={[field.name, 'licenseNumber']}
+                      rules={[
+                        {
+                          required: true,
+                          message: t('pages.newPolicy.validation.enterLicenseNumber'),
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                      label={t('pages.newPolicy.participants.licenseIssuedAt')}
+                      name={[field.name, 'licenseIssuedAt']}
+                      rules={[
+                        {
+                          required: true,
+                          message: t('pages.newPolicy.validation.enterLicenseIssuedAt'),
+                        },
+                      ]}
+                    >
+                      <DatePicker
+                        format="DD.MM.YYYY"
+                        disabledDate={(current) => current.isAfter(dayjs(), 'day')}
+                        style={{ width: '100%' }}
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      label={t('pages.newPolicy.participants.bonusMalusClass')}
                       name={[field.name, 'bonusMalusClass']}
-                      rules={[{ required: true, message: 'Введите КБМ' }]}
+                      rules={[{ required: true, message: t('pages.newPolicy.validation.enterBonusMalus') }]}
                     >
                       <InputNumber min={0} max={13} style={{ width: '100%' }} />
                     </Form.Item>
@@ -196,7 +217,7 @@ export function ParticipantsStep() {
 
                 {fields.length < 4 && (
                   <Button type="dashed" icon={<PlusOutlined />} onClick={() => add()}>
-                    Добавить водителя
+                    {t('pages.newPolicy.participants.addDriver')}
                   </Button>
                 )}
 
