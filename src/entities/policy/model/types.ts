@@ -1,5 +1,6 @@
 export type DriverAccessType = 'LIMITED' | 'NO_LIMITS'
 export type PolicyStatus = 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'PENDING_REVIEW'
+export type InspectionVerificationStatus = 'APPROVED' | 'REJECTED' | 'MANUAL_REVIEW'
 
 export interface VehicleInfo {
   brandId: string
@@ -52,4 +53,16 @@ export interface Policy {
   driverAccessType: DriverAccessType
   durationId: string
   premium: PolicyPremium
+}
+
+export interface InspectionPhotoPayload {
+  name: string
+  size: number
+  type: string
+}
+
+export interface InspectionVerificationResult {
+  status: InspectionVerificationStatus
+  confidence: number
+  issues: string[]
 }
