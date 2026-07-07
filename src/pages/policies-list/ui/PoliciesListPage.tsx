@@ -1,9 +1,17 @@
 import { Alert, Card, Empty, Spin, Tag, Typography } from 'antd'
 import { useTranslation } from 'react-i18next'
 
+import type { PolicyStatus } from '../../../entities/policy'
 import { usePoliciesList } from '../model/usePoliciesList'
 
 const { Paragraph, Text, Title } = Typography
+
+const statusColors: Record<PolicyStatus, string> = {
+  ACTIVE: 'green',
+  DRAFT: 'gold',
+  EXPIRED: 'default',
+  PENDING_REVIEW: 'blue',
+}
 
 export function PoliciesListPage() {
   const { t } = useTranslation()
@@ -50,7 +58,7 @@ export function PoliciesListPage() {
               {policy.vehicle.model} • {policy.vehicle.registrationNumber}
             </Paragraph>
             <Paragraph>
-              <Tag color={policy.status === 'ACTIVE' ? 'green' : 'gold'}>{policy.status}</Tag>
+              <Tag color={statusColors[policy.status]}>{policy.status}</Tag>
               <Text>{policy.premium.total} KGS</Text>
             </Paragraph>
           </Card>
