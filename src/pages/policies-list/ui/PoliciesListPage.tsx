@@ -145,7 +145,7 @@ export function PoliciesListPage() {
                   <Title level={4}>{policy.number}</Title>
 
                   <Paragraph>
-                    {policy.vehicle.model} · {policy.vehicle.registrationNumber}
+                    {policy.vehicle.model} - {policy.vehicle.registrationNumber}
                   </Paragraph>
 
                   <Paragraph>
