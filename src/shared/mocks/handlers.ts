@@ -8,20 +8,20 @@ function getInspectionVerdict(confidence: number) {
   if (confidence >= 85) {
     return {
       status: 'APPROVED' as const,
-      issues: [],
+      issues: ['Inspection approved automatically'],
     }
   }
 
   if (confidence < 35) {
     return {
       status: 'REJECTED' as const,
-      issues: ['Photo quality is too low for automatic verification'],
+      issues: ['Inspection rejected automatically'],
     }
   }
 
   return {
     status: 'MANUAL_REVIEW' as const,
-    issues: ['Front bumper photo is blurry'],
+    issues: ['Inspection sent to manual review'],
   }
 }
 

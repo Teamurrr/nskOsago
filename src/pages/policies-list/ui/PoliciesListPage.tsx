@@ -28,6 +28,7 @@ function getPolicyStatusColor(status: PolicyStatus) {
 }
 
 export function PoliciesListPage() {
+  // throw new Error('Test error boundary')
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { data, isLoading, error } = usePoliciesList()

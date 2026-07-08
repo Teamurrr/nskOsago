@@ -71,10 +71,11 @@ export function InspectionUploadCard({ policyId }: InspectionUploadCardProps) {
       const compressedPhotos = await Promise.all(
         files.map(async (file) => {
           const compressedFile = await imageCompression(file, {
-            maxSizeMB: 0.8,
-            maxWidthOrHeight: 1600,
-            useWebWorker: true,
-          })
+  maxSizeMB: 0.12,
+  maxWidthOrHeight: 900,
+  initialQuality: 0.55,
+  useWebWorker: true,
+})
 
           return {
             id: `${file.name}-${file.lastModified}-${crypto.randomUUID()}`,
@@ -199,30 +200,43 @@ export function InspectionUploadCard({ policyId }: InspectionUploadCardProps) {
         )}
 
         <Button
-          type="primary"
-          disabled={photos.length === 0}
-          loading={isVerifying}
-          onClick={handleVerify}
-        >
-          Send for verification
-        </Button>
+  type="primary"
+  disabled={photos.length === 0 || isCompressing}
+  loading={isVerifying}
+  onClick={handleVerify}
+>
+  {isVerifying ? 'Verifying inspection...' : 'Send for verification'}
+</Button>
 
-        {result && (
-          <Alert
-            type={result.status === 'APPROVED' ? 'success' : result.status === 'REJECTED' ? 'error' : 'warning'}
-            showIcon
-            message={
-              <Space>
-                <span>Verification result</span>
-                <Tag color={getResultColor(result.status)}>{result.status}</Tag>
-                <Text>{result.confidence}% confidence</Text>
-              </Space>
-            }
-            description={
-              result.issues.length > 0 ? result.issues.join(', ') : 'No issues detected.'
-            }
-          />
-        )}
+        {photos.length === 0 && (
+  <Alert
+    type="info"
+    showIcon
+    message="Upload inspection photos"
+    description="Add several vehicle photos before sending the policy for AI verification."
+  />
+)}
+
+{result && (
+  <Card size="small" title="AI inspection verdict">
+    <Space direction="vertical" size="small" style={{ width: '100%' }}>
+      <Space wrap>
+        <Tag color={getResultColor(result.status)}>{result.status}</Tag>
+        <Text strong>{result.confidence}% confidence</Text>
+      </Space>
+
+      {result.issues.length > 0 ? (
+        <ul style={{ margin: 0, paddingLeft: 20 }}>
+          {result.issues.map((issue) => (
+            <li key={issue}>{issue}</li>
+          ))}
+        </ul>
+      ) : (
+        <Text type="secondary">No issues detected.</Text>
+      )}
+    </Space>
+  </Card>
+)}
       </Space>
     </Card>
   )
