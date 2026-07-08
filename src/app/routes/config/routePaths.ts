@@ -3,4 +3,6 @@ export const routePaths = {
   policies: '/policies',
   calculator: '/calculator',
   policyCreate: '/policies/new',
+  policyDetails: '/policies/:id',
+  getPolicyDetails: (id: string) => `/policies/${id}`,
 } as const
