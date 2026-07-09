@@ -219,6 +219,10 @@ export const en = {
           enterLicenseIssuedAt: 'Enter license issue date',
           enterBonusMalus: 'Enter KBM',
           selectDuration: 'Select insurance duration',
+          dateCannotBeFuture: 'Date cannot be in the future',
+          minPersonAge: 'Age must be at least {{value}} years',
+          licenseAfterBirthDate: 'License issue date must be after birth date',
+          licenseMinAge: 'License cannot be issued before age {{value}}',
         },
       },
       notFound: {
