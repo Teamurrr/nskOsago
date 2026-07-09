@@ -219,6 +219,10 @@ export const ru = {
           enterLicenseIssuedAt: 'Введите дату выдачи прав',
           enterBonusMalus: 'Введите КБМ',
           selectDuration: 'Выберите срок страхования',
+          dateCannotBeFuture: 'Дата не может быть в будущем',
+          minPersonAge: 'Возраст должен быть не меньше {{value}} лет',
+          licenseAfterBirthDate: 'Дата выдачи прав должна быть позже даты рождения',
+          licenseMinAge: 'Права не могут быть выданы раньше {{value}} лет',
         },
       },
       notFound: {

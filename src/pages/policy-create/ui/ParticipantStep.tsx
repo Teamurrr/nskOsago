@@ -6,6 +6,13 @@ import { useTranslation } from 'react-i18next'
 const { Title } = Typography
 const disabledHtmlFor = null as unknown as string
 
+const minPersonAge = 18
+const minLicenseAge = 17
+
+function getAge(value: Dayjs) {
+  return dayjs().diff(value, 'year')
+}
+
 export interface PersonStepValues {
   firstName: string
   lastName: string
@@ -27,6 +34,7 @@ export interface ParticipantsStepValues {
 
 export function ParticipantsStep() {
   const { t } = useTranslation()
+  const form = Form.useFormInstance()
   const driverAccessType = Form.useWatch('driverAccessType')
 
   return (
@@ -64,7 +72,34 @@ export function ParticipantsStep() {
         <Form.Item
           label={t('pages.newPolicy.participants.dateOfBirth')}
           name={['owner', 'dateOfBirth']}
-          rules={[{ required: true, message: t('pages.newPolicy.validation.enterBirthDate') }]}
+          rules={[
+            { required: true, message: t('pages.newPolicy.validation.enterBirthDate') },
+            {
+              validator: (_, value: Dayjs | undefined) => {
+                if (!value) {
+                  return Promise.resolve()
+                }
+
+                if (value.isAfter(dayjs(), 'day')) {
+                  return Promise.reject(
+                    new Error(t('pages.newPolicy.validation.dateCannotBeFuture')),
+                  )
+                }
+
+                if (getAge(value) < minPersonAge) {
+                  return Promise.reject(
+                    new Error(
+                      t('pages.newPolicy.validation.minPersonAge', {
+                        value: minPersonAge,
+                      }),
+                    ),
+                  )
+                }
+
+                return Promise.resolve()
+              },
+            },
+          ]}
         >
           <DatePicker
             format="DD.MM.YYYY"
@@ -167,7 +202,35 @@ export function ParticipantsStep() {
                       label={t('pages.newPolicy.participants.dateOfBirth')}
                       name={[field.name, 'dateOfBirth']}
                       rules={[
-                        { required: true, message: t('pages.newPolicy.validation.enterBirthDate') },
+                        {
+                          required: true,
+                          message: t('pages.newPolicy.validation.enterBirthDate'),
+                        },
+                        {
+                          validator: (_, value: Dayjs | undefined) => {
+                            if (!value) {
+                              return Promise.resolve()
+                            }
+
+                            if (value.isAfter(dayjs(), 'day')) {
+                              return Promise.reject(
+                                new Error(t('pages.newPolicy.validation.dateCannotBeFuture')),
+                              )
+                            }
+
+                            if (getAge(value) < minPersonAge) {
+                              return Promise.reject(
+                                new Error(
+                                  t('pages.newPolicy.validation.minPersonAge', {
+                                    value: minPersonAge,
+                                  }),
+                                ),
+                              )
+                            }
+
+                            return Promise.resolve()
+                          },
+                        },
                       ]}
                     >
                       <DatePicker
@@ -193,10 +256,54 @@ export function ParticipantsStep() {
                     <Form.Item
                       label={t('pages.newPolicy.participants.licenseIssuedAt')}
                       name={[field.name, 'licenseIssuedAt']}
+                      dependencies={[['drivers', field.name, 'dateOfBirth']]}
                       rules={[
                         {
                           required: true,
                           message: t('pages.newPolicy.validation.enterLicenseIssuedAt'),
+                        },
+                        {
+                          validator: (_, value: Dayjs | undefined) => {
+                            if (!value) {
+                              return Promise.resolve()
+                            }
+
+                            if (value.isAfter(dayjs(), 'day')) {
+                              return Promise.reject(
+                                new Error(t('pages.newPolicy.validation.dateCannotBeFuture')),
+                              )
+                            }
+
+                            const birthDate = form.getFieldValue([
+                              'drivers',
+                              field.name,
+                              'dateOfBirth',
+                            ]) as Dayjs | undefined
+
+                            if (!birthDate) {
+                              return Promise.resolve()
+                            }
+
+                            if (!value.isAfter(birthDate, 'day')) {
+                              return Promise.reject(
+                                new Error(
+                                  t('pages.newPolicy.validation.licenseAfterBirthDate'),
+                                ),
+                              )
+                            }
+
+                            if (value.diff(birthDate, 'year') < minLicenseAge) {
+                              return Promise.reject(
+                                new Error(
+                                  t('pages.newPolicy.validation.licenseMinAge', {
+                                    value: minLicenseAge,
+                                  }),
+                                ),
+                              )
+                            }
+
+                            return Promise.resolve()
+                          },
                         },
                       ]}
                     >
@@ -210,7 +317,12 @@ export function ParticipantsStep() {
                     <Form.Item
                       label={t('pages.newPolicy.participants.bonusMalusClass')}
                       name={[field.name, 'bonusMalusClass']}
-                      rules={[{ required: true, message: t('pages.newPolicy.validation.enterBonusMalus') }]}
+                      rules={[
+                        {
+                          required: true,
+                          message: t('pages.newPolicy.validation.enterBonusMalus'),
+                        },
+                      ]}
                     >
                       <InputNumber min={0} max={13} style={{ width: '100%' }} />
                     </Form.Item>
