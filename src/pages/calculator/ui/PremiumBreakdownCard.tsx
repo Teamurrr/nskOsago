@@ -1,4 +1,4 @@
-import { Card, Space, Typography } from 'antd'
+import { Card, Table, Typography } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 import type { OsagoDictionaries } from '../../../entities/dictionary'
@@ -8,6 +8,13 @@ import type {
 } from '../../../features/calculate-premium'
 
 const { Text } = Typography
+
+interface BreakdownRow {
+  key: string
+  component: string
+  details: string
+  value: number
+}
 
 interface PremiumBreakdownCardProps {
   result: PremiumCalculationResult
@@ -49,61 +56,88 @@ export function PremiumBreakdownCard({
       ? t('pages.calculator.form.driverAccessNoLimits')
       : t('pages.calculator.form.driverAccessLimited')
 
-  const formula = [
-    result.breakdown.baseTariff,
-    result.breakdown.territoryCoefficient,
-    result.breakdown.powerCoefficient,
-    result.breakdown.ageExperienceCoefficient,
-    result.breakdown.driverAccessCoefficient,
-    result.breakdown.durationCoefficient,
-    result.breakdown.bonusMalusCoefficient,
-  ].join(' × ')
+  const rows: BreakdownRow[] = [
+    {
+      key: 'baseTariff',
+      component: t('pages.calculator.result.baseTariff'),
+      details: t('pages.calculator.result.baseTariff'),
+      value: result.breakdown.baseTariff,
+    },
+    {
+      key: 'territory',
+      component: t('pages.calculator.result.territory'),
+      details: isRussian ? (region?.nameRu ?? '-') : (region?.nameEn ?? '-'),
+      value: result.breakdown.territoryCoefficient,
+    },
+    {
+      key: 'power',
+      component: t('pages.calculator.result.power'),
+      details: t('pages.calculator.result.powerDetails', {
+        power: input.power,
+        tier: powerTierLabel,
+      }),
+      value: result.breakdown.powerCoefficient,
+    },
+    {
+      key: 'ageExperience',
+      component: t('pages.calculator.result.ageExperience'),
+      details: t('pages.calculator.result.ageExperienceDetails', {
+        age: input.driverAge,
+        experience: input.driverExperience,
+        reason: ageExperienceReason,
+      }),
+      value: result.breakdown.ageExperienceCoefficient,
+    },
+    {
+      key: 'driverAccess',
+      component: t('pages.calculator.result.driverAccess'),
+      details: driverAccessLabel,
+      value: result.breakdown.driverAccessCoefficient,
+    },
+    {
+      key: 'duration',
+      component: t('pages.calculator.result.duration'),
+      details: isRussian ? (duration?.nameRu ?? '-') : (duration?.nameEn ?? '-'),
+      value: result.breakdown.durationCoefficient,
+    },
+    {
+      key: 'bonusMalus',
+      component: t('pages.calculator.result.bonusMalus'),
+      details: t('pages.calculator.form.bonusMalusClassValue', {
+        value: bonusMalus?.class ?? input.bonusMalusClass,
+      }),
+      value: bonusMalus?.k ?? result.breakdown.bonusMalusCoefficient,
+    },
+  ]
 
   return (
     <Card size="small" title={t('pages.calculator.result.title')}>
-      <Space orientation="vertical">
-        <Text>
-          {t('pages.calculator.result.baseTariff')}: {result.breakdown.baseTariff}
-        </Text>
+      <Table<BreakdownRow>
+        size="small"
+        pagination={false}
+        dataSource={rows}
+        columns={[
+          {
+            title: t('pages.calculator.result.component'),
+            dataIndex: 'component',
+            key: 'component',
+          },
+          {
+            title: t('pages.calculator.result.details'),
+            dataIndex: 'details',
+            key: 'details',
+          },
+          {
+            title: t('pages.calculator.result.value'),
+            dataIndex: 'value',
+            key: 'value',
+          },
+        ]}
+      />
 
-        <Text>
-          {t('pages.calculator.result.territory')}: {isRussian ? region?.nameRu : region?.nameEn}{' '}
-          → {result.breakdown.territoryCoefficient}
-        </Text>
-
-        <Text>
-          {t('pages.calculator.result.power')}: {input.power} → {powerTierLabel} →{' '}
-          {result.breakdown.powerCoefficient}
-        </Text>
-
-        <Text>
-          {t('pages.calculator.result.ageExperience')}: {input.driverAge} /{' '}
-          {input.driverExperience} → {ageExperienceReason} →{' '}
-          {result.breakdown.ageExperienceCoefficient}
-        </Text>
-
-        <Text>
-          {t('pages.calculator.result.driverAccess')}: {driverAccessLabel} →{' '}
-          {result.breakdown.driverAccessCoefficient}
-        </Text>
-
-        <Text>
-          {t('pages.calculator.result.duration')}: {isRussian ? duration?.nameRu : duration?.nameEn}{' '}
-          → {result.breakdown.durationCoefficient}
-        </Text>
-
-        <Text>
-          {t('pages.calculator.result.bonusMalus')}:{' '}
-          {t('pages.calculator.form.bonusMalusClassValue', {
-            value: bonusMalus?.class ?? input.bonusMalusClass,
-          })}{' '}
-          → {bonusMalus?.k ?? result.breakdown.bonusMalusCoefficient}
-        </Text>
-
-        <Text strong>
-          {t('pages.calculator.result.formula')}: {formula} = {result.total}
-        </Text>
-      </Space>
+      <Text strong style={{ display: 'block', marginTop: 16 }}>
+        {t('pages.calculator.result.premium')} = {result.total} {t('common.currency')}
+      </Text>
     </Card>
   )
 }

@@ -109,6 +109,13 @@ export const en = {
         result: {
           title: 'Premium result',
           total: 'Total',
+          premium: 'Premium',
+          component: 'Component',
+          details: 'Details',
+          value: 'Value',
+          powerDetails: 'Power: {{power}} hp; category: {{tier}}',
+          ageExperienceDetails:
+            'Age: {{age}} years; experience: {{experience}} years; {{reason}}',
           baseTariff: 'Base tariff',
           territory: 'Territory',
           power: 'Power',

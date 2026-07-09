@@ -109,6 +109,13 @@ export const ru = {
         result: {
           title: 'Результат расчёта',
           total: 'Итого',
+          premium: 'Премия',
+          component: 'Компонент',
+          details: 'Данные',
+          value: 'Значение',
+          powerDetails: 'Мощность: {{power}} л.с.; категория: {{tier}}',
+          ageExperienceDetails:
+            'Возраст: {{age}} лет; стаж: {{experience}} лет; {{reason}}',
           baseTariff: 'Базовый тариф',
           territory: 'Территория',
           power: 'Мощность',
