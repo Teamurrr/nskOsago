@@ -82,19 +82,19 @@ export function PolicyCreatePage() {
   const steps = [
     {
       title: t('pages.newPolicy.steps.vehicle.title'),
-      description: t('pages.newPolicy.steps.vehicle.description'),
+      content: t('pages.newPolicy.steps.vehicle.description'),
     },
     {
       title: t('pages.newPolicy.steps.participants.title'),
-      description: t('pages.newPolicy.steps.participants.description'),
+      content: t('pages.newPolicy.steps.participants.description'),
     },
     {
       title: t('pages.newPolicy.steps.calculation.title'),
-      description: t('pages.newPolicy.steps.calculation.description'),
+      content: t('pages.newPolicy.steps.calculation.description'),
     },
     {
       title: t('pages.newPolicy.steps.confirmation.title'),
-      description: t('pages.newPolicy.steps.confirmation.description'),
+      content: t('pages.newPolicy.steps.confirmation.description'),
     },
   ]
   const isLastStep = currentStep === steps.length - 1
@@ -203,7 +203,7 @@ export function PolicyCreatePage() {
   if (error || !dictionaries) {
     return (
       <Alert
-        message={t('pages.newPolicy.title')}
+        title={t('pages.newPolicy.title')}
         description={error ?? t('pages.newPolicy.loadingError')}
         type="error"
         showIcon
@@ -225,6 +225,7 @@ export function PolicyCreatePage() {
           form={form}
           layout="vertical"
           preserve
+          onSubmitCapture={(event) => event.preventDefault()}
           initialValues={{
             brandId: dictionaries.carBrands[0]?.id,
             model: dictionaries.carBrands[0]?.models[0],

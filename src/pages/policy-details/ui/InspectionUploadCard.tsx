@@ -1,6 +1,6 @@
 import { DeleteOutlined, UploadOutlined } from '@ant-design/icons'
 import type { UploadFile } from 'antd'
-import { Alert, Button, Card, Image, List, Space, Spin, Tag, Typography, Upload } from 'antd'
+import { Alert, Button, Card, Image, Space, Spin, Tag, Typography, Upload } from 'antd'
 import imageCompression from 'browser-image-compression'
 import { useMemo, useState } from 'react'
 
@@ -71,11 +71,11 @@ export function InspectionUploadCard({ policyId }: InspectionUploadCardProps) {
       const compressedPhotos = await Promise.all(
         files.map(async (file) => {
           const compressedFile = await imageCompression(file, {
-  maxSizeMB: 0.12,
-  maxWidthOrHeight: 900,
-  initialQuality: 0.55,
-  useWebWorker: true,
-})
+            maxSizeMB: 0.12,
+            maxWidthOrHeight: 900,
+            initialQuality: 0.55,
+            useWebWorker: true,
+          })
 
           return {
             id: `${file.name}-${file.lastModified}-${crypto.randomUUID()}`,
@@ -156,87 +156,90 @@ export function InspectionUploadCard({ policyId }: InspectionUploadCardProps) {
           </Space>
         )}
 
-        {error && <Alert message={error} type="error" showIcon />}
+        {error && <Alert title={error} type="error" showIcon />}
 
         {photos.length > 0 && (
-          <List
-            grid={{ gutter: 16, xs: 1, sm: 2, md: 3 }}
-            dataSource={photos}
-            renderItem={(photo) => (
-              <List.Item>
-                <Card
-                  size="small"
-                  cover={
-                    <Image
-                      src={photo.previewUrl}
-                      alt={photo.file.name}
-                      height={180}
-                      style={{ objectFit: 'cover' }}
-                    />
-                  }
-                  actions={[
-                    <Button
-                      key="remove"
-                      type="text"
-                      danger
-                      icon={<DeleteOutlined />}
-                      onClick={() => handleRemovePhoto(photo.id)}
-                    />,
-                  ]}
-                >
-                  <Space orientation="vertical" size={4}>
-                    <Text strong ellipsis>
-                      {photo.file.name}
-                    </Text>
-                    <Text type="secondary">
-                      {formatFileSize(photo.originalSize)} →{' '}
-                      {formatFileSize(photo.compressedSize)}
-                    </Text>
-                  </Space>
-                </Card>
-              </List.Item>
-            )}
-          />
+          <div
+            style={{
+              display: 'grid',
+              gap: 16,
+              gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+            }}
+          >
+            {photos.map((photo) => (
+              <Card
+                key={photo.id}
+                size="small"
+                cover={
+                  <Image
+                    src={photo.previewUrl}
+                    alt={photo.file.name}
+                    height={180}
+                    style={{ objectFit: 'cover' }}
+                  />
+                }
+                actions={[
+                  <Button
+                    key="remove"
+                    type="text"
+                    danger
+                    icon={<DeleteOutlined />}
+                    onClick={() => handleRemovePhoto(photo.id)}
+                  />,
+                ]}
+              >
+                <Space orientation="vertical" size={4}>
+                  <Text strong ellipsis>
+                    {photo.file.name}
+                  </Text>
+                  <Text type="secondary">
+                    {formatFileSize(photo.originalSize)} {'->'}{' '}
+                    {formatFileSize(photo.compressedSize)}
+                  </Text>
+                </Space>
+              </Card>
+            ))}
+          </div>
         )}
 
         <Button
-  type="primary"
-  disabled={photos.length === 0 || isCompressing}
-  loading={isVerifying}
-  onClick={handleVerify}
->
-  {isVerifying ? 'Verifying inspection...' : 'Send for verification'}
-</Button>
+          type="primary"
+          disabled={photos.length === 0 || isCompressing}
+          loading={isVerifying}
+          onClick={handleVerify}
+        >
+          {isVerifying ? 'Verifying inspection...' : 'Send for verification'}
+        </Button>
 
         {photos.length === 0 && (
-  <Alert
-    type="info"
-    showIcon
-    message="Upload inspection photos"
-    description="Add several vehicle photos before sending the policy for AI verification."
-  />
-)}
+          <Alert
+            type="info"
+            showIcon
+            title="Upload inspection photos"
+            description="Add several vehicle photos before sending the policy for AI verification."
+          />
+        )}
 
-{result && (
-  <Card size="small" title="AI inspection verdict">
-    <Space orientation="vertical" size="small" style={{ width: '100%' }}>
-      <Space wrap>
-        <Tag color={getResultColor(result.status)}>{result.status}</Tag>
-        <Text strong>{result.confidence}% confidence</Text>
-      </Space>
+        {result && (
+          <Card size="small" title="AI inspection verdict">
+            <Space orientation="vertical" size="small" style={{ width: '100%' }}>
+              <Space wrap>
+                <Tag color={getResultColor(result.status)}>{result.status}</Tag>
+                <Text strong>{result.confidence}% confidence</Text>
+              </Space>
 
-      {result.issues.length > 0 ? (
-        <ul style={{ margin: 0, paddingLeft: 20 }}>
-          {result.issues.map((issue) => (
-            <li key={issue}>{issue}</li>
-          ))}
-        </ul>
-      ) : (
-        <Text type="secondary">No issues detected.</Text>
-      )}
-    </Space>
-  </Card>
-)}
+              {result.issues.length > 0 ? (
+                <ul style={{ margin: 0, paddingLeft: 20 }}>
+                  {result.issues.map((issue) => (
+                    <li key={issue}>{issue}</li>
+                  ))}
+                </ul>
+              ) : (
+                <Text type="secondary">No issues detected.</Text>
+              )}
+            </Space>
+          </Card>
+        )}
       </Space>
     </Card>
   )

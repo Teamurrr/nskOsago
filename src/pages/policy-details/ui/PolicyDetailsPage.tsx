@@ -23,7 +23,7 @@ export function PolicyDetailsPage() {
   if (error || !policy) {
     return (
       <Alert
-        message="Policy details"
+        title="Policy details"
         description={error ?? 'Policy not found.'}
         type="error"
         showIcon

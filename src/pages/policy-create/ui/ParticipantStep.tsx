@@ -4,6 +4,7 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 
 const { Title } = Typography
+const disabledHtmlFor = null as unknown as string
 
 export interface PersonStepValues {
   firstName: string
@@ -78,6 +79,7 @@ export function ParticipantsStep() {
 
         <Form.Item
           name="driverAccessType"
+          htmlFor={disabledHtmlFor}
           rules={[{ required: true, message: t('pages.newPolicy.validation.selectAccessType') }]}
         >
           <Radio.Group

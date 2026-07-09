@@ -6,6 +6,8 @@ import type { OsagoDictionaries } from '../../../entities/dictionary'
 import { calculateAge } from '../../../features/calculate-premium'
 import type { CalculatorFormValues } from '../model/types'
 
+const disabledHtmlFor = null as unknown as string
+
 interface CalculatorFormProps {
   dictionaries: OsagoDictionaries
   form: ReturnType<typeof Form.useForm<CalculatorFormValues>>[0]
@@ -144,6 +146,7 @@ export function CalculatorForm({ dictionaries, form }: CalculatorFormProps) {
       <Form.Item
         label={t('pages.calculator.form.driverAccess')}
         name="driverAccessType"
+        htmlFor={disabledHtmlFor}
         rules={[{ required: true, message: t('pages.calculator.validation.required') }]}
       >
         <Radio.Group

@@ -86,7 +86,7 @@ export function PoliciesListPage() {
   if (error) {
     return (
       <Alert
-        message={t('pages.policies.title')}
+        title={t('pages.policies.title')}
         description={error}
         type="error"
         showIcon

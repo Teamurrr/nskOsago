@@ -34,7 +34,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <Alert
             type="error"
             showIcon
-            message="Something went wrong"
+            title="Something went wrong"
             description="Reload the page and try again. If the problem repeats, check the console details."
             action={<Button onClick={this.handleReload}>Reload</Button>}
           />

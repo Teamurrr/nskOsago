@@ -54,7 +54,7 @@ export function CalculatorPage() {
 
       {isLoading && <Spin />}
 
-      {error && <Alert message={error} type="error" showIcon />}
+      {error && <Alert title={error} type="error" showIcon />}
 
       {data && (
         <Space orientation="vertical" size="large" style={{ width: '100%' }}>
