@@ -46,6 +46,26 @@ export const en = {
         startDate: 'Start date',
         endDate: 'End date',
       },
+      inspection: {
+        title: 'Vehicle inspection',
+        uploadPhotos: 'Upload inspection photos',
+        compressing: 'Compressing images...',
+        compressionError: 'Failed to compress selected images.',
+        verificationError: 'Inspection verification failed.',
+        sendForVerification: 'Send for verification',
+        verifying: 'Verifying inspection...',
+        emptyTitle: 'Upload inspection photos',
+        emptyDescription:
+          'Add several vehicle photos before sending the policy for AI verification.',
+        verdictTitle: 'AI inspection verdict',
+        confidence: '{{value}}% confidence',
+        noIssues: 'No issues detected.',
+        statuses: {
+          APPROVED: 'Approved',
+          REJECTED: 'Rejected',
+          MANUAL_REVIEW: 'Manual review',
+        },
+      },
       calculator: {
         title: 'OSAGO Calculator',
         description: 'Premium calculation form and coefficient breakdown.',

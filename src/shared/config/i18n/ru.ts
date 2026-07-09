@@ -46,6 +46,26 @@ export const ru = {
         startDate: 'Дата начала',
         endDate: 'Дата окончания',
       },
+      inspection: {
+        title: 'Осмотр автомобиля',
+        uploadPhotos: 'Загрузить фото осмотра',
+        compressing: 'Сжатие изображений...',
+        compressionError: 'Не удалось сжать выбранные изображения.',
+        verificationError: 'Не удалось отправить осмотр на проверку.',
+        sendForVerification: 'Отправить на верификацию',
+        verifying: 'Проверка осмотра...',
+        emptyTitle: 'Загрузите фото осмотра',
+        emptyDescription:
+          'Добавьте несколько фото автомобиля перед отправкой полиса на AI-проверку.',
+        verdictTitle: 'Вердикт AI-осмотра',
+        confidence: '{{value}}% уверенности',
+        noIssues: 'Замечаний не найдено.',
+        statuses: {
+          APPROVED: 'Одобрено',
+          REJECTED: 'Отклонено',
+          MANUAL_REVIEW: 'Ручная проверка',
+        },
+      },
       calculator: {
         title: 'Калькулятор ОСАГО',
         description: 'Форма расчёта премии и разбивка коэффициентов.',
