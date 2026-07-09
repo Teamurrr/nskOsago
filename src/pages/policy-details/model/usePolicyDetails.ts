@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { getPolicy, type Policy } from '../../../entities/policy'
 
@@ -9,6 +10,7 @@ interface UsePolicyDetailsResult {
 }
 
 export function usePolicyDetails(policyId: string | undefined): UsePolicyDetailsResult {
+  const { t } = useTranslation()
   const [data, setData] = useState<Policy | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -18,7 +20,7 @@ export function usePolicyDetails(policyId: string | undefined): UsePolicyDetails
 
     async function loadPolicy() {
       if (!policyId) {
-        setError('Policy id is missing')
+        setError(t('common.errors.missingPolicyId'))
         setIsLoading(false)
         return
       }
@@ -34,7 +36,7 @@ export function usePolicyDetails(policyId: string | undefined): UsePolicyDetails
         }
       } catch {
         if (isMounted) {
-          setError('Failed to load policy.')
+          setError(t('common.errors.failedToLoadPolicy'))
         }
       } finally {
         if (isMounted) {
@@ -48,7 +50,7 @@ export function usePolicyDetails(policyId: string | undefined): UsePolicyDetails
     return () => {
       isMounted = false
     }
-  }, [policyId])
+  }, [policyId, t])
 
   return { data, isLoading, error }
 }

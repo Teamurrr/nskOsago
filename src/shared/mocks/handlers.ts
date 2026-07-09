@@ -8,20 +8,20 @@ function getInspectionVerdict(confidence: number) {
   if (confidence >= 85) {
     return {
       status: 'APPROVED' as const,
-      issues: ['Inspection approved automatically'],
+      issues: ['APPROVED_AUTOMATICALLY'],
     }
   }
 
   if (confidence < 35) {
     return {
       status: 'REJECTED' as const,
-      issues: ['Inspection rejected automatically'],
+      issues: ['REJECTED_AUTOMATICALLY'],
     }
   }
 
   return {
     status: 'MANUAL_REVIEW' as const,
-    issues: ['Inspection sent to manual review'],
+    issues: ['MANUAL_REVIEW_REQUIRED'],
   }
 }
 

@@ -2,6 +2,18 @@ export const ru = {
   translation: {
     common: {
       currency: 'сом',
+      errors: {
+        failedToLoadDictionaries: 'Не удалось загрузить справочники.',
+        failedToLoadPolicies: 'Не удалось загрузить полисы.',
+        failedToLoadPolicy: 'Не удалось загрузить полис.',
+        missingPolicyId: 'Не указан идентификатор полиса.',
+      },
+      errorBoundary: {
+        title: 'Что-то пошло не так',
+        description:
+          'Перезагрузите страницу и попробуйте снова. Если ошибка повторится, проверьте детали в консоли.',
+        reload: 'Перезагрузить',
+      },
     },
     app: {
       title: 'NSK Страхование',
@@ -64,6 +76,11 @@ export const ru = {
           APPROVED: 'Одобрено',
           REJECTED: 'Отклонено',
           MANUAL_REVIEW: 'Ручная проверка',
+        },
+        issues: {
+          APPROVED_AUTOMATICALLY: 'Осмотр автоматически одобрен',
+          REJECTED_AUTOMATICALLY: 'Осмотр автоматически отклонен',
+          MANUAL_REVIEW_REQUIRED: 'Осмотр отправлен на ручную проверку',
         },
       },
       calculator: {

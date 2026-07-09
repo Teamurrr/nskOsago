@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { getDictionaries, type OsagoDictionaries } from '../../../entities/dictionary'
 
@@ -9,6 +10,7 @@ interface UseDictionariesResult {
 }
 
 export function useDictionaries(): UseDictionariesResult {
+  const { t } = useTranslation()
   const [data, setData] = useState<OsagoDictionaries | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -28,7 +30,7 @@ export function useDictionaries(): UseDictionariesResult {
         }
       } catch {
         if (isMounted) {
-          setError('Failed to load dictionaries.')
+          setError(t('common.errors.failedToLoadDictionaries'))
         }
       } finally {
         if (isMounted) {
@@ -42,7 +44,7 @@ export function useDictionaries(): UseDictionariesResult {
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [t])
 
   return { data, isLoading, error }
 }

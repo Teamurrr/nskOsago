@@ -237,7 +237,9 @@ export function InspectionUploadCard({ policyId }: InspectionUploadCardProps) {
               {result.issues.length > 0 ? (
                 <ul style={{ margin: 0, paddingLeft: 20 }}>
                   {result.issues.map((issue) => (
-                    <li key={issue}>{issue}</li>
+                    <li key={issue}>
+                      {t(`pages.inspection.issues.${issue}`, { defaultValue: issue })}
+                    </li>
                   ))}
                 </ul>
               ) : (

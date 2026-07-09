@@ -2,6 +2,18 @@ export const en = {
   translation: {
     common: {
       currency: 'KGS',
+      errors: {
+        failedToLoadDictionaries: 'Failed to load dictionaries.',
+        failedToLoadPolicies: 'Failed to load policies.',
+        failedToLoadPolicy: 'Failed to load policy.',
+        missingPolicyId: 'Policy id is missing.',
+      },
+      errorBoundary: {
+        title: 'Something went wrong',
+        description:
+          'Reload the page and try again. If the problem repeats, check the console details.',
+        reload: 'Reload',
+      },
     },
     app: {
       title: 'NSK Insurance',
@@ -64,6 +76,11 @@ export const en = {
           APPROVED: 'Approved',
           REJECTED: 'Rejected',
           MANUAL_REVIEW: 'Manual review',
+        },
+        issues: {
+          APPROVED_AUTOMATICALLY: 'Inspection approved automatically',
+          REJECTED_AUTOMATICALLY: 'Inspection rejected automatically',
+          MANUAL_REVIEW_REQUIRED: 'Inspection sent to manual review',
         },
       },
       calculator: {

@@ -2,6 +2,8 @@ import { Alert, Button, Card } from 'antd'
 import type { ErrorInfo, ReactNode } from 'react'
 import { Component } from 'react'
 
+import { i18n } from '../../../../shared/config/i18n/i18n'
+
 interface ErrorBoundaryProps {
   children: ReactNode
 }
@@ -34,9 +36,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
           <Alert
             type="error"
             showIcon
-            title="Something went wrong"
-            description="Reload the page and try again. If the problem repeats, check the console details."
-            action={<Button onClick={this.handleReload}>Reload</Button>}
+            title={i18n.t('common.errorBoundary.title')}
+            description={i18n.t('common.errorBoundary.description')}
+            action={
+              <Button onClick={this.handleReload}>
+                {i18n.t('common.errorBoundary.reload')}
+              </Button>
+            }
           />
         </Card>
       )

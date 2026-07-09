@@ -120,7 +120,7 @@ export function ConfirmationStep({
           </Descriptions.Item>
           <Descriptions.Item label={t('pages.newPolicy.confirmation.premium')}>
             {calculationResult
-              ? `${calculationResult.total} KGS`
+              ? `${calculationResult.total} ${t('common.currency')}`
               : t('pages.newPolicy.confirmation.notCalculated')}
           </Descriptions.Item>
           <Descriptions.Item label={t('pages.newPolicy.participants.bonusMalusClass')}>
