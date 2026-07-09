@@ -1,11 +1,27 @@
-import { Alert, Button, Card, Form, Select, Space, Spin, Steps, Typography } from 'antd'
+import {
+  Alert,
+  Button,
+  Card,
+  Descriptions,
+  Form,
+  Select,
+  Space,
+  Spin,
+  Steps,
+  Typography,
+} from 'antd'
 import dayjs from 'dayjs'
 import { nanoid } from 'nanoid'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { type Policy,savePolicyDraft } from '../../../entities/policy'
-import { calculateAge, calculatePremium } from '../../../features/calculate-premium'
+import { type Policy, savePolicyDraft } from '../../../entities/policy'
+import {
+  calculateAge,
+  calculatePremium,
+  type PremiumCalculationInput,
+  type PremiumCalculationResult,
+} from '../../../features/calculate-premium'
 import { useDictionaries } from '../../calculator/model/useDictionaries'
 import { PremiumBreakdownCard } from '../../calculator/ui/PremiumBreakdownCard'
 import { ConfirmationStep } from './ConfirmationPage'
@@ -16,6 +32,18 @@ const { Paragraph, Title } = Typography
 
 interface PolicyCreateFormValues extends VehicleStepValues, ParticipantsStepValues {
   durationId: string
+}
+
+interface SelectedCalculationDriver {
+  fullName: string
+  age: number
+  experience: number
+  bonusMalusClass: number
+}
+
+interface PremiumCalculationCandidate {
+  input: PremiumCalculationInput
+  selectedDriver: SelectedCalculationDriver | null
 }
 
 function generatePolicyNumber() {
@@ -43,39 +71,120 @@ export function PolicyCreatePage() {
     ...form.getFieldsValue(true),
   } as PolicyCreateFormValues
 
-  const firstDriver = currentValues.drivers?.[0]
-  const calculationBirthDate = firstDriver?.dateOfBirth ?? currentValues.owner?.dateOfBirth
-  const calculationLicenseIssuedAt = firstDriver?.licenseIssuedAt
-  const calculationBonusMalusClass = firstDriver?.bonusMalusClass ?? 3
-
-  const calculationInput =
+  const canCalculatePremium =
     dictionaries &&
     currentValues.regionId &&
     currentValues.power &&
     currentValues.driverAccessType &&
-    currentValues.durationId &&
-    calculationBirthDate
+    currentValues.durationId
+
+  const driverCalculationCandidates: PremiumCalculationCandidate[] =
+    canCalculatePremium &&
+    currentValues.driverAccessType === 'LIMITED' &&
+    currentValues.drivers?.length
+      ? currentValues.drivers
+          .filter((driver): driver is NonNullable<typeof driver> => Boolean(driver?.dateOfBirth))
+          .map((driver, index) => {
+            const age = calculateAge(driver.dateOfBirth.toDate())
+            const experience = driver.licenseIssuedAt
+              ? calculateYearsSince(driver.licenseIssuedAt.toDate())
+              : 0
+            const bonusMalusClass = driver.bonusMalusClass ?? 3
+            const fullName = `${driver.firstName ?? ''} ${driver.lastName ?? ''}`.trim()
+
+            return {
+              input: {
+                vehicleTypeId: 'passenger_car',
+                regionId: currentValues.regionId,
+                power: currentValues.power,
+                driverAge: age,
+                driverExperience: experience,
+                driverAccessType: currentValues.driverAccessType,
+                durationId: currentValues.durationId,
+                bonusMalusClass,
+              },
+              selectedDriver: {
+                fullName:
+                  fullName ||
+                  t('pages.newPolicy.calculation.driverFallback', { value: index + 1 }),
+                age,
+                experience,
+                bonusMalusClass,
+              },
+            }
+          })
+      : []
+
+  const fallbackBirthDate =
+    currentValues.drivers?.[0]?.dateOfBirth ?? currentValues.owner?.dateOfBirth
+  const fallbackLicenseIssuedAt = currentValues.drivers?.[0]?.licenseIssuedAt
+
+  const fallbackAge = fallbackBirthDate ? calculateAge(fallbackBirthDate.toDate()) : null
+  const fallbackExperience = fallbackLicenseIssuedAt
+    ? calculateYearsSince(fallbackLicenseIssuedAt.toDate())
+    : 0
+  const fallbackBonusMalusClass = currentValues.drivers?.[0]?.bonusMalusClass ?? 3
+  const fallbackCalculationCandidate: PremiumCalculationCandidate | null =
+    canCalculatePremium && fallbackBirthDate
       ? {
-          vehicleTypeId: 'passenger_car',
-          regionId: currentValues.regionId,
-          power: currentValues.power,
-          driverAge: calculateAge(calculationBirthDate.toDate()),
-          driverExperience: calculationLicenseIssuedAt
-            ? calculateYearsSince(calculationLicenseIssuedAt.toDate())
-            : 0,
-          driverAccessType: currentValues.driverAccessType,
-          durationId: currentValues.durationId,
-          bonusMalusClass: calculationBonusMalusClass,
+          input: {
+            vehicleTypeId: 'passenger_car',
+            regionId: currentValues.regionId,
+            power: currentValues.power,
+            driverAge: fallbackAge ?? 0,
+            driverExperience: fallbackExperience,
+            driverAccessType: currentValues.driverAccessType,
+            durationId: currentValues.durationId,
+            bonusMalusClass: fallbackBonusMalusClass,
+          },
+          selectedDriver:
+            currentValues.driverAccessType === 'LIMITED' && currentValues.drivers?.[0]
+              ? {
+                  fullName:
+                    `${currentValues.drivers[0].firstName ?? ''} ${
+                      currentValues.drivers[0].lastName ?? ''
+                    }`.trim() || t('pages.newPolicy.calculation.driverFallback', { value: 1 }),
+                  age: fallbackAge ?? 0,
+                  experience: fallbackExperience,
+                  bonusMalusClass: fallbackBonusMalusClass,
+                }
+              : null,
         }
       : null
 
-  const calculationResult =
-    dictionaries && calculationInput
-      ? calculatePremium({
-          input: calculationInput,
+  const calculationCandidates =
+    driverCalculationCandidates.length > 0
+      ? driverCalculationCandidates
+      : fallbackCalculationCandidate
+        ? [fallbackCalculationCandidate]
+        : []
+
+  const calculation = dictionaries
+    ? calculationCandidates.reduce<{
+        input: PremiumCalculationInput
+        result: PremiumCalculationResult
+        selectedDriver: SelectedCalculationDriver | null
+      } | null>((bestCalculation, candidate) => {
+        const result = calculatePremium({
+          input: candidate.input,
           dictionaries,
         })
-      : null
+
+        if (!bestCalculation || result.total > bestCalculation.result.total) {
+          return {
+            input: candidate.input,
+            result,
+            selectedDriver: candidate.selectedDriver,
+          }
+        }
+
+        return bestCalculation
+      }, null)
+    : null
+
+  const calculationInput = calculation?.input ?? null
+  const calculationResult = calculation?.result ?? null
+  const selectedCalculationDriver = calculation?.selectedDriver ?? null
 
   const isFirstStep = currentStep === 0
   const isRussian = i18n.language === 'ru'
@@ -277,11 +386,37 @@ export function PolicyCreatePage() {
               </Form.Item>
 
               {calculationResult && calculationInput && (
-                <PremiumBreakdownCard
-                  result={calculationResult}
-                  input={calculationInput}
-                  dictionaries={dictionaries}
-                />
+                <>
+                  {selectedCalculationDriver && (
+                    <Card size="small" title={t('pages.newPolicy.calculation.selectedDriver')}>
+                      <Descriptions column={1} size="small">
+                        <Descriptions.Item label={t('pages.newPolicy.calculation.fullName')}>
+                          {selectedCalculationDriver.fullName}
+                        </Descriptions.Item>
+                        <Descriptions.Item label={t('pages.newPolicy.calculation.age')}>
+                          {selectedCalculationDriver.age}
+                        </Descriptions.Item>
+                        <Descriptions.Item label={t('pages.newPolicy.calculation.experience')}>
+                          {selectedCalculationDriver.experience}
+                        </Descriptions.Item>
+                        <Descriptions.Item
+                          label={t('pages.newPolicy.participants.bonusMalusClass')}
+                        >
+                          {selectedCalculationDriver.bonusMalusClass}
+                        </Descriptions.Item>
+                        <Descriptions.Item label={t('pages.newPolicy.confirmation.premium')}>
+                          {calculationResult.total} {t('common.currency')}
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </Card>
+                  )}
+
+                  <PremiumBreakdownCard
+                    result={calculationResult}
+                    input={calculationInput}
+                    dictionaries={dictionaries}
+                  />
+                </>
               )}
             </Space>
           )}

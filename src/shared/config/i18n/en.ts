@@ -180,6 +180,11 @@ export const en = {
         },
         calculation: {
           duration: 'Insurance duration',
+          selectedDriver: 'Driver used for premium calculation',
+          driverFallback: 'Driver {{value}}',
+          fullName: 'Full name',
+          age: 'Age',
+          experience: 'Experience',
         },
         confirmation: {
           vehicle: 'Vehicle',
