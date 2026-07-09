@@ -180,6 +180,11 @@ export const ru = {
         },
         calculation: {
           duration: 'Срок страхования',
+          selectedDriver: 'Водитель, по которому рассчитана премия',
+          driverFallback: 'Водитель {{value}}',
+          fullName: 'ФИО',
+          age: 'Возраст',
+          experience: 'Стаж',
         },
         confirmation: {
           vehicle: 'Автомобиль',
