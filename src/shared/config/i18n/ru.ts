@@ -2,8 +2,8 @@ export const ru = {
   translation: {
     app: {
       title: 'NSK Страхование',
-      subtitle: 'Рабочее место агента',
-      product: 'ОСАГО Demo',
+      subtitle: '',
+      product: 'Осаго',
     },
     navigation: {
       policies: 'Полисы',

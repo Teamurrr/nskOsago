@@ -2,8 +2,8 @@ export const en = {
   translation: {
     app: {
       title: 'NSK Insurance',
-      subtitle: 'Agent workspace',
-      product: 'OSAGO Demo',
+      subtitle: '',
+      product: 'OSAGO ',
     },
     navigation: {
       policies: 'Policies',
