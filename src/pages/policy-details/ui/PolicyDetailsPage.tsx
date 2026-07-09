@@ -1,4 +1,5 @@
 import { Alert, Button, Card, Descriptions, Space, Spin, Tag, Typography } from 'antd'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { routePaths } from '../../../app/routes/config/routePaths'
@@ -9,6 +10,7 @@ const { Title } = Typography
 
 export function PolicyDetailsPage() {
   const { id } = useParams()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { data: policy, isLoading, error } = usePolicyDetails(id)
 
@@ -23,13 +25,13 @@ export function PolicyDetailsPage() {
   if (error || !policy) {
     return (
       <Alert
-        title="Policy details"
-        description={error ?? 'Policy not found.'}
+        title={t('pages.policyDetails.title')}
+        description={error ?? t('pages.policyDetails.notFound')}
         type="error"
         showIcon
         action={
           <Button onClick={() => navigate(routePaths.policies)}>
-            Back to policies
+            {t('pages.policyDetails.backToPolicies')}
           </Button>
         }
       />
@@ -40,49 +42,63 @@ export function PolicyDetailsPage() {
     <Space orientation="vertical" size="large" style={{ width: '100%' }}>
       <Card>
         <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
-          <Button onClick={() => navigate(routePaths.policies)}>Back to policies</Button>
+          <Button onClick={() => navigate(routePaths.policies)}>
+            {t('pages.policyDetails.backToPolicies')}
+          </Button>
 
           <Title level={2} style={{ margin: 0 }}>
             {policy.number}
           </Title>
 
           <Tag color={policy.status === 'ACTIVE' ? 'green' : 'gold'}>
-            {policy.status}
+            {t(`pages.policies.statuses.${policy.status}`)}
           </Tag>
         </Space>
       </Card>
 
-      <Card title="Vehicle">
+      <Card title={t('pages.policyDetails.vehicle')}>
         <Descriptions column={1} bordered>
-          <Descriptions.Item label="Model">{policy.vehicle.model}</Descriptions.Item>
-          <Descriptions.Item label="Registration number">
+          <Descriptions.Item label={t('pages.policyDetails.model')}>
+            {policy.vehicle.model}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.policyDetails.registrationNumber')}>
             {policy.vehicle.registrationNumber}
           </Descriptions.Item>
           <Descriptions.Item label="VIN">{policy.vehicle.vin}</Descriptions.Item>
-          <Descriptions.Item label="Year">{policy.vehicle.year}</Descriptions.Item>
-          <Descriptions.Item label="Power">{policy.vehicle.power}</Descriptions.Item>
+          <Descriptions.Item label={t('pages.policyDetails.year')}>
+            {policy.vehicle.year}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.policyDetails.power')}>
+            {policy.vehicle.power}
+          </Descriptions.Item>
         </Descriptions>
       </Card>
 
-      <Card title="Owner">
+      <Card title={t('pages.policyDetails.owner')}>
         <Descriptions column={1} bordered>
-          <Descriptions.Item label="Full name">
+          <Descriptions.Item label={t('pages.policyDetails.fullName')}>
             {policy.owner.firstName} {policy.owner.lastName}
           </Descriptions.Item>
-          <Descriptions.Item label="Date of birth">
+          <Descriptions.Item label={t('pages.policyDetails.dateOfBirth')}>
             {policy.owner.dateOfBirth}
           </Descriptions.Item>
-          <Descriptions.Item label="Personal ID">
+          <Descriptions.Item label={t('pages.policyDetails.personalId')}>
             {policy.owner.personalId}
           </Descriptions.Item>
         </Descriptions>
       </Card>
 
-      <Card title="Premium">
+      <Card title={t('pages.policyDetails.premium')}>
         <Descriptions column={1} bordered>
-          <Descriptions.Item label="Total">{policy.premium.total} KGS</Descriptions.Item>
-          <Descriptions.Item label="Start date">{policy.startsAt}</Descriptions.Item>
-          <Descriptions.Item label="End date">{policy.endsAt}</Descriptions.Item>
+          <Descriptions.Item label={t('pages.policyDetails.total')}>
+            {policy.premium.total} {t('common.currency')}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.policyDetails.startDate')}>
+            {policy.startsAt}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('pages.policyDetails.endDate')}>
+            {policy.endsAt}
+          </Descriptions.Item>
         </Descriptions>
       </Card>
 
