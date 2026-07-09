@@ -1,5 +1,8 @@
 export const en = {
   translation: {
+    common: {
+      currency: 'KGS',
+    },
     app: {
       title: 'NSK Insurance',
       subtitle: '',
@@ -14,6 +17,16 @@ export const en = {
       policies: {
         title: 'Policies',
         description: 'Issued and draft insurance policies.',
+        searchPlaceholder: 'Search by policy, owner, vehicle, or plate',
+        open: 'Open',
+        empty: 'No policies yet.',
+        statuses: {
+          ALL: 'All statuses',
+          ACTIVE: 'Active',
+          DRAFT: 'Draft',
+          PENDING_REVIEW: 'Pending review',
+          EXPIRED: 'Expired',
+        },
       },
       calculator: {
         title: 'OSAGO Calculator',
@@ -158,7 +171,6 @@ export const en = {
         description: 'Page not found.',
         action: 'Go to policies',
       },
-      empty: 'No policies yet.',
     },
   },
 }

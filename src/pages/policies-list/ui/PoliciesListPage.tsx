@@ -103,7 +103,7 @@ export function PoliciesListPage() {
         <Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
           <Input.Search
             allowClear
-            placeholder="Search by policy, owner, vehicle, plate"
+            placeholder={t('pages.policies.searchPlaceholder')}
             value={search}
             onChange={(event) => handleSearchChange(event.target.value)}
             style={{ width: 320 }}
@@ -114,11 +114,14 @@ export function PoliciesListPage() {
             onChange={handleStatusChange}
             style={{ width: 220 }}
             options={[
-              { value: 'ALL', label: 'All statuses' },
-              { value: 'ACTIVE', label: 'Active' },
-              { value: 'DRAFT', label: 'Draft' },
-              { value: 'PENDING_REVIEW', label: 'Pending review' },
-              { value: 'EXPIRED', label: 'Expired' },
+              { value: 'ALL', label: t('pages.policies.statuses.ALL') },
+              { value: 'ACTIVE', label: t('pages.policies.statuses.ACTIVE') },
+              { value: 'DRAFT', label: t('pages.policies.statuses.DRAFT') },
+              {
+                value: 'PENDING_REVIEW',
+                label: t('pages.policies.statuses.PENDING_REVIEW'),
+              },
+              { value: 'EXPIRED', label: t('pages.policies.statuses.EXPIRED') },
             ]}
           />
         </Space>
@@ -137,7 +140,7 @@ export function PoliciesListPage() {
                       type="link"
                       onClick={() => navigate(routePaths.getPolicyDetails(policy.id))}
                     >
-                      Open
+                      {t('pages.policies.open')}
                     </Button>
                   }
                 >
@@ -152,8 +155,12 @@ export function PoliciesListPage() {
                   </Paragraph>
 
                   <Paragraph>
-                    <Tag color={getPolicyStatusColor(policy.status)}>{policy.status}</Tag>
-                    <Text>{policy.premium.total} KGS</Text>
+                    <Tag color={getPolicyStatusColor(policy.status)}>
+                      {t(`pages.policies.statuses.${policy.status}`)}
+                    </Tag>
+                    <Text>
+                      {policy.premium.total} {t('common.currency')}
+                    </Text>
                   </Paragraph>
                 </Card>
               ))}

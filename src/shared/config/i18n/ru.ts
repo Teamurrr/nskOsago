@@ -1,5 +1,8 @@
 export const ru = {
   translation: {
+    common: {
+      currency: 'сом',
+    },
     app: {
       title: 'NSK Страхование',
       subtitle: '',
@@ -14,6 +17,16 @@ export const ru = {
       policies: {
         title: 'Полисы',
         description: 'Список оформленных и черновых страховых полисов.',
+        searchPlaceholder: 'Поиск по полису, владельцу, авто или госномеру',
+        open: 'Открыть',
+        empty: 'Полисы пока отсутствуют.',
+        statuses: {
+          ALL: 'Все статусы',
+          ACTIVE: 'Активен',
+          DRAFT: 'Черновик',
+          PENDING_REVIEW: 'На проверке',
+          EXPIRED: 'Истек',
+        },
       },
       calculator: {
         title: 'Калькулятор ОСАГО',
@@ -158,7 +171,6 @@ export const ru = {
         description: 'Страница не найдена.',
         action: 'Перейти к полисам',
       },
-      empty: 'Полисы пока отсутствуют.',
     },
   },
 }
