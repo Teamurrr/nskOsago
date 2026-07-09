@@ -66,15 +66,8 @@ export const handlers = [
     return HttpResponse.json(policy)
   }),
 
-   http.post('/api/policies/:id/inspection/verify', async ({ params, request }) => {
+  http.post('/api/policies/:id/inspection/verify', async ({ request }) => {
     await delay(1200)
-
-    const policyId = String(params.id)
-    const policy = policies.find((item) => item.id === policyId)
-
-    if (!policy) {
-      return HttpResponse.json({ message: 'Policy not found' }, { status: 404 })
-    }
 
     let photos: InspectionPhotoPayload[] = []
 
@@ -100,5 +93,4 @@ export const handlers = [
       ...verdict,
     })
   }),
-
 ]

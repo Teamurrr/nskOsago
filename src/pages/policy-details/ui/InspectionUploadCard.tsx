@@ -133,13 +133,13 @@ export function InspectionUploadCard({ policyId }: InspectionUploadCardProps) {
 
   return (
     <Card title="Vehicle inspection">
-      <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+      <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
         <Upload
           multiple
           accept="image/*"
           fileList={uploadFileList}
           showUploadList={false}
-          beforeUpload={(file, fileList) => {
+          beforeUpload={(_, fileList) => {
             void handleSelectFiles(fileList as File[])
             return Upload.LIST_IGNORE
           }}
@@ -184,7 +184,7 @@ export function InspectionUploadCard({ policyId }: InspectionUploadCardProps) {
                     />,
                   ]}
                 >
-                  <Space direction="vertical" size={4}>
+                  <Space orientation="vertical" size={4}>
                     <Text strong ellipsis>
                       {photo.file.name}
                     </Text>
@@ -219,7 +219,7 @@ export function InspectionUploadCard({ policyId }: InspectionUploadCardProps) {
 
 {result && (
   <Card size="small" title="AI inspection verdict">
-    <Space direction="vertical" size="small" style={{ width: '100%' }}>
+    <Space orientation="vertical" size="small" style={{ width: '100%' }}>
       <Space wrap>
         <Tag color={getResultColor(result.status)}>{result.status}</Tag>
         <Text strong>{result.confidence}% confidence</Text>

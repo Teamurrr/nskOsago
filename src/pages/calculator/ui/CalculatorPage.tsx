@@ -57,7 +57,7 @@ export function CalculatorPage() {
       {error && <Alert message={error} type="error" showIcon />}
 
       {data && (
-        <Space direction="vertical" size="large" style={{ width: '100%' }}>
+        <Space orientation="vertical" size="large" style={{ width: '100%' }}>
           <CalculatorForm dictionaries={data} form={form} />
 
           {calculationResult && calculationInput && (

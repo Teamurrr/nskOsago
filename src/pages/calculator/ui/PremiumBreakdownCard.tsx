@@ -61,7 +61,7 @@ export function PremiumBreakdownCard({
 
   return (
     <Card size="small" title={t('pages.calculator.result.title')}>
-      <Space direction="vertical">
+      <Space orientation="vertical">
         <Text>
           {t('pages.calculator.result.baseTariff')}: {result.breakdown.baseTariff}
         </Text>

@@ -37,9 +37,9 @@ export function PolicyDetailsPage() {
   }
 
   return (
-    <Space direction="vertical" size="large" style={{ width: '100%' }}>
+    <Space orientation="vertical" size="large" style={{ width: '100%' }}>
       <Card>
-        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+        <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
           <Button onClick={() => navigate(routePaths.policies)}>Back to policies</Button>
 
           <Title level={2} style={{ margin: 0 }}>

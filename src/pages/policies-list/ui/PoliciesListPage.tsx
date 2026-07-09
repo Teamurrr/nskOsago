@@ -28,7 +28,6 @@ function getPolicyStatusColor(status: PolicyStatus) {
 }
 
 export function PoliciesListPage() {
-  // throw new Error('Test error boundary')
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { data, isLoading, error } = usePoliciesList()
@@ -100,7 +99,7 @@ export function PoliciesListPage() {
       <Title level={2}>{t('pages.policies.title')}</Title>
       <Paragraph>{t('pages.policies.description')}</Paragraph>
 
-      <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+      <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
         <Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
           <Input.Search
             allowClear

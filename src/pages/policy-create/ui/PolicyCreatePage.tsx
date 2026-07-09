@@ -213,7 +213,7 @@ export function PolicyCreatePage() {
 
   return (
     <Card>
-      <Space direction="vertical" size="large" style={{ width: '100%' }}>
+      <Space orientation="vertical" size="large" style={{ width: '100%' }}>
         <div>
           <Title level={2}>{t('pages.newPolicy.title')}</Title>
           <Paragraph>{t('pages.newPolicy.description')}</Paragraph>
@@ -259,7 +259,7 @@ export function PolicyCreatePage() {
           {currentStep === 1 && <ParticipantsStep />}
 
           {currentStep === 2 && (
-            <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+            <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
               <Form.Item
                 label={t('pages.newPolicy.calculation.duration')}
                 name="durationId"
