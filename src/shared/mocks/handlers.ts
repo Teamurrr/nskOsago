@@ -8,20 +8,20 @@ function getInspectionVerdict(confidence: number) {
   if (confidence >= 85) {
     return {
       status: 'APPROVED' as const,
-      issues: ['Inspection approved automatically'],
+      issues: ['APPROVED_AUTOMATICALLY'],
     }
   }
 
   if (confidence < 35) {
     return {
       status: 'REJECTED' as const,
-      issues: ['Inspection rejected automatically'],
+      issues: ['REJECTED_AUTOMATICALLY'],
     }
   }
 
   return {
     status: 'MANUAL_REVIEW' as const,
-    issues: ['Inspection sent to manual review'],
+    issues: ['MANUAL_REVIEW_REQUIRED'],
   }
 }
 
@@ -66,15 +66,8 @@ export const handlers = [
     return HttpResponse.json(policy)
   }),
 
-   http.post('/api/policies/:id/inspection/verify', async ({ params, request }) => {
+  http.post('/api/policies/:id/inspection/verify', async ({ request }) => {
     await delay(1200)
-
-    const policyId = String(params.id)
-    const policy = policies.find((item) => item.id === policyId)
-
-    if (!policy) {
-      return HttpResponse.json({ message: 'Policy not found' }, { status: 404 })
-    }
 
     let photos: InspectionPhotoPayload[] = []
 
@@ -100,5 +93,4 @@ export const handlers = [
       ...verdict,
     })
   }),
-
 ]

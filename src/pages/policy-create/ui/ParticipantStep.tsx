@@ -4,6 +4,7 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 
 const { Title } = Typography
+const disabledHtmlFor = null as unknown as string
 
 export interface PersonStepValues {
   firstName: string
@@ -29,7 +30,7 @@ export function ParticipantsStep() {
   const driverAccessType = Form.useWatch('driverAccessType')
 
   return (
-    <Space direction="vertical" size="large" style={{ width: '100%' }}>
+    <Space orientation="vertical" size="large" style={{ width: '100%' }}>
       <Card size="small">
         <Title level={4}>{t('pages.newPolicy.participants.owner')}</Title>
 
@@ -78,6 +79,7 @@ export function ParticipantsStep() {
 
         <Form.Item
           name="driverAccessType"
+          htmlFor={disabledHtmlFor}
           rules={[{ required: true, message: t('pages.newPolicy.validation.selectAccessType') }]}
         >
           <Radio.Group
@@ -110,7 +112,7 @@ export function ParticipantsStep() {
             ]}
           >
             {(fields, { add, remove }, { errors }) => (
-              <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+              <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
                 {fields.map((field, index) => (
                   <Card
                     key={field.key}

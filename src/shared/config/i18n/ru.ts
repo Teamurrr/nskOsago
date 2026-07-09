@@ -1,9 +1,24 @@
 export const ru = {
   translation: {
+    common: {
+      currency: 'сом',
+      errors: {
+        failedToLoadDictionaries: 'Не удалось загрузить справочники.',
+        failedToLoadPolicies: 'Не удалось загрузить полисы.',
+        failedToLoadPolicy: 'Не удалось загрузить полис.',
+        missingPolicyId: 'Не указан идентификатор полиса.',
+      },
+      errorBoundary: {
+        title: 'Что-то пошло не так',
+        description:
+          'Перезагрузите страницу и попробуйте снова. Если ошибка повторится, проверьте детали в консоли.',
+        reload: 'Перезагрузить',
+      },
+    },
     app: {
       title: 'NSK Страхование',
-      subtitle: 'Рабочее место агента',
-      product: 'ОСАГО Demo',
+      subtitle: '',
+      product: 'Осаго',
     },
     navigation: {
       policies: 'Полисы',
@@ -14,6 +29,59 @@ export const ru = {
       policies: {
         title: 'Полисы',
         description: 'Список оформленных и черновых страховых полисов.',
+        searchPlaceholder: 'Поиск по полису, владельцу, авто или госномеру',
+        open: 'Открыть',
+        empty: 'Полисы пока отсутствуют.',
+        statuses: {
+          ALL: 'Все статусы',
+          ACTIVE: 'Активен',
+          DRAFT: 'Черновик',
+          PENDING_REVIEW: 'На проверке',
+          EXPIRED: 'Истек',
+        },
+      },
+      policyDetails: {
+        title: 'Детали полиса',
+        notFound: 'Полис не найден.',
+        backToPolicies: 'Назад к полисам',
+        vehicle: 'Автомобиль',
+        owner: 'Собственник',
+        premium: 'Премия',
+        model: 'Модель',
+        registrationNumber: 'Госномер',
+        year: 'Год выпуска',
+        power: 'Мощность',
+        fullName: 'ФИО',
+        dateOfBirth: 'Дата рождения',
+        personalId: 'ИНН',
+        total: 'Итого',
+        startDate: 'Дата начала',
+        endDate: 'Дата окончания',
+      },
+      inspection: {
+        title: 'Осмотр автомобиля',
+        uploadPhotos: 'Загрузить фото осмотра',
+        compressing: 'Сжатие изображений...',
+        compressionError: 'Не удалось сжать выбранные изображения.',
+        verificationError: 'Не удалось отправить осмотр на проверку.',
+        sendForVerification: 'Отправить на верификацию',
+        verifying: 'Проверка осмотра...',
+        emptyTitle: 'Загрузите фото осмотра',
+        emptyDescription:
+          'Добавьте несколько фото автомобиля перед отправкой полиса на AI-проверку.',
+        verdictTitle: 'Вердикт AI-осмотра',
+        confidence: '{{value}}% уверенности',
+        noIssues: 'Замечаний не найдено.',
+        statuses: {
+          APPROVED: 'Одобрено',
+          REJECTED: 'Отклонено',
+          MANUAL_REVIEW: 'Ручная проверка',
+        },
+        issues: {
+          APPROVED_AUTOMATICALLY: 'Осмотр автоматически одобрен',
+          REJECTED_AUTOMATICALLY: 'Осмотр автоматически отклонен',
+          MANUAL_REVIEW_REQUIRED: 'Осмотр отправлен на ручную проверку',
+        },
       },
       calculator: {
         title: 'Калькулятор ОСАГО',
@@ -158,7 +226,6 @@ export const ru = {
         description: 'Страница не найдена.',
         action: 'Перейти к полисам',
       },
-      empty: 'Полисы пока отсутствуют.',
     },
   },
 }

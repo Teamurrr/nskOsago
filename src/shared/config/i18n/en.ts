@@ -1,9 +1,24 @@
 export const en = {
   translation: {
+    common: {
+      currency: 'KGS',
+      errors: {
+        failedToLoadDictionaries: 'Failed to load dictionaries.',
+        failedToLoadPolicies: 'Failed to load policies.',
+        failedToLoadPolicy: 'Failed to load policy.',
+        missingPolicyId: 'Policy id is missing.',
+      },
+      errorBoundary: {
+        title: 'Something went wrong',
+        description:
+          'Reload the page and try again. If the problem repeats, check the console details.',
+        reload: 'Reload',
+      },
+    },
     app: {
       title: 'NSK Insurance',
-      subtitle: 'Agent workspace',
-      product: 'OSAGO Demo',
+      subtitle: '',
+      product: 'OSAGO ',
     },
     navigation: {
       policies: 'Policies',
@@ -14,6 +29,59 @@ export const en = {
       policies: {
         title: 'Policies',
         description: 'Issued and draft insurance policies.',
+        searchPlaceholder: 'Search by policy, owner, vehicle, or plate',
+        open: 'Open',
+        empty: 'No policies yet.',
+        statuses: {
+          ALL: 'All statuses',
+          ACTIVE: 'Active',
+          DRAFT: 'Draft',
+          PENDING_REVIEW: 'Pending review',
+          EXPIRED: 'Expired',
+        },
+      },
+      policyDetails: {
+        title: 'Policy details',
+        notFound: 'Policy not found.',
+        backToPolicies: 'Back to policies',
+        vehicle: 'Vehicle',
+        owner: 'Owner',
+        premium: 'Premium',
+        model: 'Model',
+        registrationNumber: 'Registration number',
+        year: 'Year',
+        power: 'Power',
+        fullName: 'Full name',
+        dateOfBirth: 'Date of birth',
+        personalId: 'Personal ID',
+        total: 'Total',
+        startDate: 'Start date',
+        endDate: 'End date',
+      },
+      inspection: {
+        title: 'Vehicle inspection',
+        uploadPhotos: 'Upload inspection photos',
+        compressing: 'Compressing images...',
+        compressionError: 'Failed to compress selected images.',
+        verificationError: 'Inspection verification failed.',
+        sendForVerification: 'Send for verification',
+        verifying: 'Verifying inspection...',
+        emptyTitle: 'Upload inspection photos',
+        emptyDescription:
+          'Add several vehicle photos before sending the policy for AI verification.',
+        verdictTitle: 'AI inspection verdict',
+        confidence: '{{value}}% confidence',
+        noIssues: 'No issues detected.',
+        statuses: {
+          APPROVED: 'Approved',
+          REJECTED: 'Rejected',
+          MANUAL_REVIEW: 'Manual review',
+        },
+        issues: {
+          APPROVED_AUTOMATICALLY: 'Inspection approved automatically',
+          REJECTED_AUTOMATICALLY: 'Inspection rejected automatically',
+          MANUAL_REVIEW_REQUIRED: 'Inspection sent to manual review',
+        },
       },
       calculator: {
         title: 'OSAGO Calculator',
@@ -158,7 +226,6 @@ export const en = {
         description: 'Page not found.',
         action: 'Go to policies',
       },
-      empty: 'No policies yet.',
     },
   },
 }

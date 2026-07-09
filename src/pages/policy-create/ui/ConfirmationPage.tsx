@@ -47,7 +47,7 @@ export function ConfirmationStep({
   }
 
   return (
-    <Space direction="vertical" size="large" style={{ width: '100%' }}>
+    <Space orientation="vertical" size="large" style={{ width: '100%' }}>
       <Card size="small">
         <Title level={4}>{t('pages.newPolicy.confirmation.vehicle')}</Title>
 
@@ -120,7 +120,7 @@ export function ConfirmationStep({
           </Descriptions.Item>
           <Descriptions.Item label={t('pages.newPolicy.confirmation.premium')}>
             {calculationResult
-              ? `${calculationResult.total} KGS`
+              ? `${calculationResult.total} ${t('common.currency')}`
               : t('pages.newPolicy.confirmation.notCalculated')}
           </Descriptions.Item>
           <Descriptions.Item label={t('pages.newPolicy.participants.bonusMalusClass')}>

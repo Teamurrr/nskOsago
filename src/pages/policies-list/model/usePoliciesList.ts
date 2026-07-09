@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { getPolicies, type Policy } from '../../../entities/policy'
 
@@ -9,6 +10,7 @@ interface UsePoliciesListResult {
 }
 
 export function usePoliciesList(): UsePoliciesListResult {
+  const { t } = useTranslation()
   const [data, setData] = useState<Policy[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -28,7 +30,7 @@ export function usePoliciesList(): UsePoliciesListResult {
         }
       } catch {
         if (isMounted) {
-          setError('Failed to load policies.')
+          setError(t('common.errors.failedToLoadPolicies'))
         }
       } finally {
         if (isMounted) {
@@ -42,7 +44,7 @@ export function usePoliciesList(): UsePoliciesListResult {
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [t])
 
   return { data, isLoading, error }
 }
