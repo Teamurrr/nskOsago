@@ -1,73 +1,114 @@
-# React + TypeScript + Vite
+# NSK OSAGO Calculator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Небольшое фронтенд-приложение для расчета и оформления демо-полиса ОСАГО. Бэкенда в проекте нет: запросы обрабатываются через MSW, а созданные черновики сохраняются в `localStorage`.
 
-Currently, two official plugins are available:
+## Что реализовано
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- список полисов с поиском, фильтром по статусу и пагинацией;
+- калькулятор ОСАГО с разбивкой коэффициентов;
+- пошаговое оформление полиса;
+- расчет премии по самому рискованному водителю в ограниченном списке;
+- сохранение черновика полиса в `localStorage`;
+- страница деталей полиса;
+- загрузка фото осмотра авто, сжатие изображений и mock-вердикт проверки;
+- локализация `ru/en`;
+- базовые unit-тесты для расчета премии.
 
-## React Compiler
+## Стек
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Vite
+- React
+- TypeScript
+- Ant Design
+- react-router-dom
+- i18next
+- axios
+- MSW
+- dayjs
+- Vitest
+- ESLint / Prettier
 
-## Expanding the ESLint configuration
+## Запуск
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Установить зависимости:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm i
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Запустить dev-сервер:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+После запуска приложение будет доступно по адресу, который покажет Vite в терминале, обычно:
+
+```text
+http://localhost:5173
+```
+
+## Проверки
+
+Линтинг:
+
+```bash
+npm run lint
+```
+
+Unit-тесты:
+
+```bash
+npm run test
+```
+
+Production build:
+
+```bash
+npm run build
+```
+
+Локальный preview production build:
+
+```bash
+npm run preview
+```
+
+## Моки и данные
+
+API-запросы идут через `axios` на `/api/...`, а в dev-режиме их перехватывает MSW.
+
+Основные mock endpoints:
+
+- `GET /api/dictionaries` - справочники регионов, мощности, сроков, КБМ и авто;
+- `GET /api/policies` - список демо-полисов;
+- `GET /api/policies/:id` - детали полиса;
+- `POST /api/policies/:id/inspection/verify` - имитация проверки фото осмотра.
+
+Стартовые данные лежат в:
+
+- `src/shared/config/mock-data/dictionaries.ts`
+- `src/shared/config/mock-data/policies.ts`
+
+Черновики, созданные через мастер оформления, сохраняются в `localStorage` с ключом:
+
+```text
+nsk.policyDrafts
+```
+
+## Расчет премии
+
+Расчет вынесен в чистую функцию:
+
+```text
+src/features/calculate-premium/model/calculatePremium.ts
+```
+
+Формула:
+
+```text
+Премия = БТ x Кт x Кмощн x Квозр_стаж x Огранич x Ксрок x КБМ
+```
+
+В мастере оформления для ограниченного списка водителей расчет выполняется по каждому водителю, после чего выбирается самый дорогой вариант. На шаге расчета показывается водитель, по которому была рассчитана итоговая премия.
