@@ -7,7 +7,10 @@ import { App } from './app/App'
 import { ErrorBoundary } from './app/providers/error-boundary'
 
 async function enableMocking() {
-  if (import.meta.env.DEV) {
+  const shouldEnableMocks =
+    import.meta.env.DEV || import.meta.env.VITE_ENABLE_MOCKS === 'true'
+
+  if (shouldEnableMocks) {
     const { worker } = await import('./shared/mocks')
 
     await worker.start({
