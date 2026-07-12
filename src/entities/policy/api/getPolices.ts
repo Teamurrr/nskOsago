@@ -3,7 +3,11 @@ import { getPolicyDrafts } from '../model/draftStorage'
 import type { Policy } from '../model/types'
 
 export async function getPolicies() {
-  const response = await apiClient.get<Policy[]>('/policies')
+  const response = await apiClient.get<unknown>('/policies')
 
-  return [...getPolicyDrafts(), ...response.data]
+  if (!Array.isArray(response.data)) {
+    throw new Error('Invalid policies response')
+  }
+
+  return [...getPolicyDrafts(), ...(response.data as Policy[])]
 }
